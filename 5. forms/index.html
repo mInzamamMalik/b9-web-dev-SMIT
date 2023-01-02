@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+    <h1>HTML5 Forms</h1>
+
+    <form>
+
+        <fieldset>
+            <legend>About you</legend>
+            <p>
+                <label for="username"> Username:</label>
+                <input required id="username" type="text" name="username" size="15" minlength="3" maxlength="30"
+                    placeholder="email or username" />
+            </p>
+            <p>
+                <label for="password"> Password:</label>
+                <input required id="password" type="password" name="password" size="15" maxlength="30"
+                    pattern="(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,}"
+                    title="Must contain at least one number and one uppercase and lowercase letter, and at least 8 or more characters" />
+            </p>
+            <p>
+                Age: <input type="number" min="18" max="35">
+            </p>
+            <p>
+                <label for=bio"> your bio: </label>
+                <textarea id="bio" name="bio" cols="30" rows="3" maxlength="300"></textarea>
+            </p>
+        </fieldset>
+
+        <fieldset>
+            <legend>some title</legend>
+            <p>
+                Please select your favorite genre:
+                <br />
+                <input id="rock" type="radio" name="genre" value="rock" />
+                <label for="rock"> Rock</label>
+
+                <input id="pop" type="radio" name="genre" value="pop" />
+                <label for="pop"> Pop</label>
+
+                <input id="jazz" type="radio" name="genre" value="jazz" />
+                <label for="jazz"> Jazz</label>
+            </p>
+
+
+            <p>
+                Please select your favorite music service(s):
+                <br />
+                <input id="itunes" type="checkbox" name="service" value="itunes" checked="checked" />
+                <label for="itunes"> iTunes</label>
+
+                <input id="lastfm" type="checkbox" name="service" value="lastfm" />
+                <label for="lastfm"> Last.fm</label>
+
+                <input id="spotify" type="checkbox" name="service" value="spotify" />
+                <label for="spotify"> Spotify</label>
+
+            </p>
+
+            <p>
+                <label for="devices"> What device do you listen to music on?</label>
+            </p>
+            <select id="devices" name="devices">
+                <option label="ipod" value="ipod">iPod</option>
+                <option label="radio" value="radio">Radio</option>
+                <option label="computer" value="computer">Computer</option>
+            </select>
+
+            <p>Upload your song in MP3 format:</p>
+            <input type="file" name="user-song" accept="image/*" />
+
+            <br />
+        </fieldset>
+
+        <!-- <input type="submit" value="Upload" /> -->
+        <button type="submit"> Upload </button>
+
+
+
+        <br>
+        <br>
+        <br>
+        <br>
+        <br>
+        <br>
+        <br>
+        <br>
+        <br>
+        <br>
+        <br>
+        <br>
+        <br>
+
+
+    </form>
+</body>
+
+</html>
