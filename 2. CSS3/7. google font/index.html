@@ -20,11 +20,34 @@
             font-weight: 300;
 
         }
+
+        h1 {
+            border: 1px solid green;
+            max-width: 6em;
+            min-width: 5em
+        }
+
+        h1:hover {
+            color: red;
+            cursor: default;
+            /* https://www.digitalocean.com/community/tutorials/css-cursor-property */
+        }
+
+        h1+p {
+            min-width: 13em;
+            max-width: 40em;
+
+            max-height: 6em;
+            border: 2px solid red;
+
+        }
     </style>
 
 </head>
 
 <body>
+    <!-- https://developer.mozilla.org/en-US/docs/Web/CSS/Pseudo-classes -->
+    <!-- https://developer.mozilla.org/en-US/docs/Web/CSS/Pseudo-elements -->
 
     <h1>Google font</h1>
 
