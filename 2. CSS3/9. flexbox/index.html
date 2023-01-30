@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+
+    <style>
+        .header {
+            display: flex;
+            justify-content: space-between;
+            background-color: #343434;
+            padding: 15px;
+            align-items: center;
+        }
+
+        .nav {
+            background-color: #0d0d0d;
+            height: 2.5em;
+        }
+
+        .nav-small {
+            display: none;
+        }
+        .nav>ul {
+            display: flex;
+            color: white;
+            column-gap: 10px;
+            padding: 0.7em;
+            margin: 0px;
+        }
+
+        .nav>ul>li {
+            list-style: none;
+        }
+
+
+        @media only screen and (max-width: 375px) {
+            .nav {
+                display: none;
+            }
+
+            .nav-small {
+                display: block;
+            }
+
+            .header {
+                padding: 30px;
+            }
+        }
+
+        @media only screen and (max-width: 768px) {
+            .nav {
+                background-color: rgb(210, 105, 0);
+            }
+
+            .header {
+                padding: 30px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="header">
+
+        <div class="logo">
+            <img width="50px" src="./logo.svg" alt="">
+        </div>
+
+        <nav class="nav-small">
+            <button>ICO</button>
+        </nav>
+
+        <nav class="nav">
+            <ul>
+                <li>Home</li>
+                <li>Gallery</li>
+                <li>Services</li>
+                <li>Contact</li>
+                <li>About</li>
+            </ul>
+        </nav>
+
+
+    </div>
+
+
+
+
+</body>
+
+</html>
