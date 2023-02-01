@@ -8,6 +8,11 @@
     <title>Document</title>
 
     <style>
+        .body {
+            display: flex;
+            flex-direction: column;
+        }
+
         .header {
             display: flex;
             justify-content: space-between;
@@ -15,25 +20,29 @@
             padding: 15px;
             align-items: center;
         }
+        .header .logo{
+            margin-left: 1em;
+        }
 
         .nav {
             background-color: #0d0d0d;
-            height: 2.5em;
+            margin-right: 1em;
         }
-
         .nav-small {
             display: none;
         }
+
         .nav>ul {
             display: flex;
             color: white;
-            column-gap: 10px;
-            padding: 0.7em;
+            column-gap: 2em;
             margin: 0px;
+            padding: 0 0.5em;
         }
 
         .nav>ul>li {
             list-style: none;
+            margin: 1em;
         }
 
 
@@ -60,15 +69,41 @@
                 padding: 30px;
             }
         }
+
+        #content {
+            width: 960px;
+            display: flex;
+            flex-direction: column;
+            align-self: center;
+            margin-top: 1em;
+
+        }
+
+        .articleSection {
+            display: flex;
+            margin-top: 1em;
+            column-gap: 2em;
+        }
+        
+        .articleSection .article img {
+            width: 100%;
+        }
+        .articleSection .article div,
+        .articleSection .article p {
+            padding: 0.3em;
+        }
+
+
+        /* 250x180 */
     </style>
 </head>
 
-<body>
+<body class="body">
 
-    <div class="header">
+    <header class="header">
 
         <div class="logo">
-            <img width="50px" src="./logo.svg" alt="">
+            <img width="50px" src="./img/logo.svg" alt="">
         </div>
 
         <nav class="nav-small">
@@ -84,9 +119,73 @@
                 <li>About</li>
             </ul>
         </nav>
+    </header>
+
+
+    <div id="content">
+
+        <div class="banner">
+            <img src="./img/banner.jpg" alt="banner image">
+        </div>
+
+        <div class="articleSection">
+
+            <div class="article">
+                <img src="./img/article.jpg" alt="">
+                <div>Subtitle line</div>
+                <p>HTML5 introduces a new set of elements that allow you to divide up the parts of a page. The names of
+                    these elements indicate the kind of content you will find in them. They are still subject to change,
+                    but
+                    that has not stopped many web page authors using them already.</p>
+            </div>
+
+            <div class="article">
+                <img src="./img/article.jpg" alt="">
+                <div>Subtitle line</div>
+                <p>HTML5 introduces a new set of elements that allow you to divide up the parts of a page. The names of
+                    these elements indicate the kind of content you will find in them. They are still subject to change,
+                    but
+                    that has not stopped many web page authors using them already.</p>
+            </div>
+
+            <div class="article">
+                <img src="./img/article.jpg" alt="">
+                <div>Subtitle line</div>
+                <p>HTML5 introduces a new set of elements that allow you to divide up the parts of a page. The names of
+                    these elements indicate the kind of content you will find in them. They are still subject to change,
+                    but
+                    that has not stopped many web page authors using them already.</p>
+            </div>
+            <div class="article">
+                <img src="./img/article.jpg" alt="">
+                <div>Subtitle line</div>
+                <p>HTML5 introduces a new set of elements that allow you to divide up the parts of a page. The names of
+                    these elements indicate the kind of content you will find in them. They are still subject to change,
+                    but
+                    that has not stopped many web page authors using them already.</p>
+            </div>
+            <div class="article">
+                <img src="./img/article.jpg" alt="">
+                <div>Subtitle line</div>
+                <p>HTML5 introduces a new set of elements that allow you to divide up the parts of a page. The names of
+                    these elements indicate the kind of content you will find in them. They are still subject to change,
+                    but
+                    that has not stopped many web page authors using them already.</p>
+            </div>
+            <div class="article">
+                <img src="./img/article.jpg" alt="">
+                <div>Subtitle line</div>
+                <p>HTML5 introduces a new set of elements that allow you to divide up the parts of a page. The names of
+                    these elements indicate the kind of content you will find in them. They are still subject to change,
+                    but
+                    that has not stopped many web page authors using them already.</p>
+            </div>
+
+        </div>
 
 
     </div>
+
 
 
 
