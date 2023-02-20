@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+    <h1>Post Increment</h1>
+
+    <script>
+        // let num1 = 5;
+         
+        // console.log(num1++);
+
+        // console.log(num1) // 6
+
+
+        // num1 = num1 + 1;
+
+        // num1++; // post increment
+        // num1--; // post decrement
+
+        // ++num1; // pre increment
+        // --num1; // pre decrement
+
+        // let num2 = num1++
+
+
+        // console.log("num1: ", num1);
+        // console.log("num2: ", num2);
+
+
+
+
+        // let num1 = 3; // 2, 1
+        // let num2 = 5; // 6 , 5
+
+        // let result = (--num1 + (num2++) - (num2--) - (num1--));
+        //             //   1         -4
+        //             //       
+        // // TODO: UNSOLVED CODE
+        // console.log("result: ", result);// 5 , -1, 1, 8,0, 2
+        // console.log("num1: ", num1);
+        // console.log("num2: ", num2);
+
+
+        
+        let num1 = 3; // 4,5, 6
+        let num2 = 5; // 6, 5
+
+        let result = num2++ - num1++ + num1++ - num1++ - num2--;
+        //             5    -  3     +  4     -  5     -  6
+        console.log("result: ", result);//  -3, -1, -5
+        console.log("num1: ", num1);
+        console.log("num2: ", num2);
+
+    </script>
+</body>
+
+</html>
