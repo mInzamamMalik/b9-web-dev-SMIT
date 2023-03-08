@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+    <h1>Enter your percentage to know your grade</h1>
+
+    <script>
+
+        let percentage = 70;
+
+        if (percentage < 0) {
+            console.log("Invalid percentage, must be between 0 and 100");
+        } else if (percentage >= 0 && percentage < 50) {
+            console.log("Sorry you are failed");
+        } else if (percentage >= 50 && percentage < 60) {
+            console.log("you got C grade");
+
+        } else if (percentage >= 60 && percentage < 70) {
+            console.log("you got B grade");
+
+        } else if (percentage >= 70 && percentage < 80) {
+            console.log("you got A grade");
+
+        } else if (percentage >= 80 && percentage <= 100) {
+            console.log("you got A1 grade");
+
+        } else {
+            console.log("Invalid percentage, must be between 0 and 100");
+        }
+
+
+
+    </script>
+
+</body>
+
+</html>
