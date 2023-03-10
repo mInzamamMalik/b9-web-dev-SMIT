@@ -49,8 +49,8 @@
 
     <img src="./bmi.jpg" alt="">
 
-    <script>
-        function calculateBMI() {
+    <script type="module">
+        window.calculateBMI = function calculateBMI() {
             let heightInputFeet = document.getElementById("heightInputFeet").value;
             let heightInputInch = document.querySelector("#heightInputInch").value;
 
