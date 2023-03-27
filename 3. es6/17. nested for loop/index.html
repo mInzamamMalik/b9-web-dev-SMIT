@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+    <h1>es6 looping statement: For Loop</h1>
+
+    <script>
+
+        // //    init    ;  cond ; inc/dec 
+        // for (var i = 0; i < 10; i++) {
+        //     console.log("some text: ", i + 1);
+        // }
+
+
+
+        let matrix1 = [
+            [2, 1, 6, 9],
+            [6, 4, 5, 6],
+            [8, 7, 8, 4]
+        ]
+
+        for (let i = 0; i < matrix1.length; i++) { 
+
+            for (let j = 0; j < matrix1[i].length; j++) {
+
+                console.log("some text: ", matrix1[i][j]);
+                
+                
+                matrix1[i][j] = matrix1[i][j] * 2
+            }
+        }
+        
+        console.log("result: ", matrix1);
+
+
+
+    </script>
+
+
+
+
+
+
+</body>
+
+</html>
