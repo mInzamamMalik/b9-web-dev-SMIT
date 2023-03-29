@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+    <h1> condition checking with ternary operator </h1>
+
+    <script>
+
+        let isOpen = false;
+        let isLocked = true;
+
+        let resp = "";
+
+        // if (isOpen) {
+        //     resp = "gate is open";
+        // } else {
+        //     resp = "gate is close";
+        // }
+
+
+        // resp = (isOpen) ? "gate is open" : "gate is close";
+
+        resp = `gate is ${ (isOpen)? "open":"close" } and it is ${ (isLocked)?"locked": "unlocked" }`
+
+        console.log("resp: ", resp);
+
+
+
+
+
+
+    </script>
+
+
+
+
+
+
+</body>
+
+</html>

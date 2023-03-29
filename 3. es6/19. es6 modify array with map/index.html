@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+    <h1>modify array with Array.map() </h1>
+
+    <script>
+        let arr = [3, 4, 6, 4, 2, 1, 2, 3];
+
+        let newArr = arr.map((eachItem, i) => {
+            console.log("eachItem: ", eachItem);
+
+            if (eachItem % 2 === 0) { // even
+                return eachItem;
+            } else {
+                return eachItem * 2;
+            }
+        })
+
+        console.log("arr: ", arr);
+        console.log("newArr: ", newArr);
+
+
+    </script>
+
+
+
+
+
+
+</body>
+
+</html>
