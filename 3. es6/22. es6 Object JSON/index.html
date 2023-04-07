@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+    <h1>es6 JSON Objects</h1>
+    <p>JSON stands for Javascript Object Notation</p>
+
+
+    <script>
+
+        let key = "name"
+        let obj = {
+            roll: "39A",
+            subject: "science",
+            name: "john",
+            isActive: true,
+            electives: [
+                { name: "abc", teacher: "Alice", grade: "23" },
+                { name: "xyz" },
+                { name: "aaa" }
+            ],
+            bio: {
+                age: 23,
+                isSingle: true,
+                nat: "Pakistani",
+                relegion: "Islam"
+            }
+
+        }
+        console.log(obj.electives[0].teacher);
+        console.log(obj.bio.age);
+        console.log(obj.bio.isSingle);
+        console.log(obj.bio.relegion);
+
+        console.log(obj[key]);
+        console.log(obj.subject);
+        console.log(obj["roll"]);
+        console.log(obj["isActive"]);
+
+        obj[key] = "malik";
+        obj.subject = "computer science";
+
+        console.log(obj);
+
+
+
+    </script>
+</body>
+
+</html>
