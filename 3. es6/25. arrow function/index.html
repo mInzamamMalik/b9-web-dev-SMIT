@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+    <h1>es6 arrow function</h1>
+
+    <script type="module">
+
+        function sum(a, b) {
+            return a + b;
+        };
+
+        let xyz1 = function (a, b) {
+            return a + b;
+        }
+        let xyz2 = (a, b) => { // arrow function, lambda function, 
+            return a + b
+        }
+
+        let sum = (a = 20, b = 10) => a + b;
+
+        sum(1, 2);// 30, 11, 3
+
+        window.getCube = num => num * num * num;
+
+
+
+
+        let orignal = [20, 23, 21];
+
+        let newArr = [40, ...orignal, 1, 0]; // spread operator
+
+        // [40, 20, 23, 21, 1, 0]
+
+        // let a = orignal[0]
+        // let b = orignal[1]
+        // let c = orignal[2]
+
+        let [a, b] = orignal;
+
+        a // 20
+
+
+        let obj = {
+            name: "malik",
+            className: "science",
+            roll: "20"
+        }
+        // let name = obj.name;
+        // let className = obj.className
+
+        let { name, className } = obj;
+
+        // name // malik
+        // className // science
+
+
+
+
+
+
+    </script>
+
+
+</body>
+
+</html>

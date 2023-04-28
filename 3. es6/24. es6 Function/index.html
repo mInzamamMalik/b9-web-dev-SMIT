@@ -16,38 +16,58 @@
 
     <script type="module">
 
-        // pure function
-        window.prt = function () {
-            console.log(new Date());
-        }
+
 
         function sum(num1, num2) {
-
             return num1 + num2;
-        }
+        };
 
-        let abc = function avg(arr) {
-            console.log("avg function is running");
 
-            let sum = 0;
-            for (let i = 0; i < arr.length; i++) {
-                sum = sum + arr[i];
-            }
-            let result = sum / arr.length;
-            result = result.toFixed(2);
-            result = Number(result);
-            return result;
-        }
+        // function recloop(index, end) {
+
+        //     console.log("loop body: ", index);
+
+
+        //     if (index === end) {
+        //         return;
+        //     } else {
+        //         recloop(index + 1, end)
+        //     }
+        // }
+
+        // recloop(0, 1000000000000000000);
+
+
+
+
+        // let abc = function avg(arr) {
+        //     console.log("avg function is running");
+
+        //     let sum = 0;
+        //     for (let i = 0; i < arr.length; i++) {
+        //         sum = sum + arr[i];
+        //     }
+        //     let result = sum / arr.length;
+        //     result = result.toFixed(2);
+        //     result = Number(result);
+        //     return result;
+        // }
 
 
         // console.log(sum(4, 1))
         // console.log(sum(3, 8))
 
-        setTimeout(() => {
+        // setInterval(() => {
 
-            console.log(avg([2, 2, 4, 3, 2, 5]));
+        //     console.log(avg([2, 2, 4, 3, 2, 5]));
 
-        }, 3000)
+        // }, 3000)
+
+
+        // // pure function
+        // window.prt = function () {
+        //     console.log(new Date());
+        // }
 
 
 
