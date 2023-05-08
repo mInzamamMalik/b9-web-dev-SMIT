@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+    <h1>MOuse over event</h1>
+
+
+    <img id="myImg" src="./img/banner.webp" onmouseover="swapImg(event)" onmouseleave="backToOriginal()" width="400">
+
+    <script type="module">
+
+        window.swapImg = (event) => {
+            console.log("event catch: ", event);
+
+            let img = document.querySelector("#myImg");
+            img.src = "./img/car.jpg"
+        }
+
+        window.backToOriginal = () => {
+            console.log("back To Original");
+
+            let img = document.querySelector("#myImg");
+            img.src = "./img/banner.webp"
+        }
+
+    </script>
+</body>
+
+</html>
