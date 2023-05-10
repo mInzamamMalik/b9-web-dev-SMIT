@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        body {
+            background-color: azure;
+        }
+        #star {
+            display: none;
+        }
+    </style>
+</head>
+
+<body>
+    <h1>Mouse Event practice</h1>
+
+
+    <img id="star" width="100px" src="./img/star.gif" alt="">
+
+    <script type="module">
+
+        let bodyMouseEvent = (event) => {
+            console.log("event: ", event.pageX, event.pageY);
+
+            star.style.display = 'block';  // Set position to absolute
+            star.style.position = 'fixed';  // Set position to absolute
+            star.style.top = `${event.clientY + 15}px`;          // Move 100 pixels from the top
+            star.style.left = `${event.clientX + 10}px`;
+        }
+
+        let star = document.querySelector("#star");
+        document.addEventListener("mousemove", bodyMouseEvent)
+        document.addEventListener("mouseout", ()=>{
+            star.style.display = 'none';
+        })
+        document.addEventListener("mousedown", ()=>{
+            star.style.border = '5px solid black';
+        })
+        document.addEventListener("mouseup", ()=>{
+            star.style.border = '0px solid black';
+        })
+
+
+
+    </script>
+</body>
+
+</html>
