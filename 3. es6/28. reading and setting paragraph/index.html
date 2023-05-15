@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body onload="seeLess()">
+
+    <h2>post title</h2>
+    <p id="postText"></p>
+
+    <br>
+    <br>
+    <br>
+    <br>
+
+    <button onclick="revealPhoto()">Reveal Photo</button>
+    <div id="img">
+        <!-- <img src="./img/star.gif" alt=""> -->
+    </div>
+
+
+    <button onclick="getName()">double name</button>
+    <div id="para">
+        Muzammil
+    </div>
+
+
+
+
+
+    <script type="module">
+
+        let fullPara = "Slow lorises are a group of several species of strepsirrhine primates which make up the genus Nycticebus. They have a round head, narrow snout, large eyes, and a variety of distinctive coloration patterns that are species-dependent. The hands and feet of slow lorises have several adaptations that give them a pincer-like grip and enable them to grasp branches for long periods of time. Slow lorises have a toxic bite, a rare trait among mammals."
+
+        let seeLessLink = `<a href="javascript:void(0);" onclick="seeLess()">see less</a>`
+        let seeMoreLink = `<a href="javascript:void(0);" onclick="seeMore()">see more</a>`
+
+        window.seeMore = () => {
+            document.querySelector("#postText").innerHTML = fullPara + " " + seeLessLink
+        }
+        window.seeLess = () => {
+            document.querySelector("#postText").innerHTML = fullPara.slice(0, 150) + "... " + seeMoreLink
+        }
+
+        window.revealPhoto = () => {
+            document.querySelector("#img").innerHTML = `<img src="./img/star.gif" alt=""> <br /> <h1>image is here </h1>`;
+        }
+
+        window.getName = () => {
+            let userName = document.querySelector("#para").innerText;
+            let resultNames = "";
+
+            for (let i = 0; i < 9; i++) {
+                resultNames += `<br /> ${userName}`
+            }
+
+            document.querySelector("#para").innerHTML = resultNames
+        }
+
+
+        
+    </script>
+</body>
+
+</html>
