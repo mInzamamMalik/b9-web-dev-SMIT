@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        .app-header {
+            display: flex;
+            background-color: rgb(206, 156, 253);
+            justify-content: center;
+        }
+
+        .app-main {
+            margin-top: 1em;
+            padding: 2em;
+            background-color: rgb(206, 156, 253);
+            display: flex;
+            gap: 1em;
+            overflow-x: auto;
+        }
+
+        .app-main .column {
+            background-color: rgb(255, 255, 110);
+            min-width: 18em;
+            min-height: 5em;
+            border-radius: 10px;
+            padding: 1em;
+        }
+        .app-main .column-dropable {
+            background-color: rgb(253, 253, 182);
+        }
+
+        .app-main .column .column-heading {
+            font-size: 1.5em;
+        }
+
+        .app-main .column .ticket {
+            background-color: rgb(233, 233, 233);
+            padding: 1em;
+            margin-top: 0.5em;
+            margin-bottom: 0.5em;
+            border-radius: 5px;
+        }
+    </style>
+</head>
+
+<body>
+
+    <header class="app-header">
+        <h1>Trello clone</h1>
+    </header>
+
+    <main class="app-main">
+        <div class="column">
+            <div class="column-heading">Todo</div>
+            <div class="ticket" draggable="true">task 1</div>
+            <div class="ticket" draggable="true">task 2</div>
+            <div class="ticket" draggable="true">task 3</div>
+        </div>
+
+        <div class="column">
+            <div class="column-heading">in progress</div>
+            <div class="ticket" draggable="true">task 4</div>
+
+        </div>
+
+    </main>
+
+
+    <script>
+
+
+        let onTheMoveElm = undefined;
+
+        allTickets = document.querySelectorAll(".ticket");
+
+        allTickets.forEach(ticketElm => {
+            ticketElm.addEventListener('mousedown', function (e) {
+            
+                console.log("e.target.className: ", e.target.className);
+                onTheMoveElm = e.target;
+            })
+        });
+        
+        allColumns = document.querySelectorAll(".column");
+        
+        allColumns.forEach(columnElm => {
+            
+            columnElm.addEventListener("dragover", (event) => {
+                // prevent default to allow drop
+                event.preventDefault();
+                if(event.target.className === "column"){
+                    event.target.classList.add("column-dropable")
+                }
+            });
+            columnElm.addEventListener("dragleave", (event) => {
+                
+                console.log("drag leave event.target.className: ", event.target.className);
+                event.preventDefault();
+                if(event.target.className.includes("column")){
+                    event.target.classList.remove("column-dropable")
+                    
+                }
+            });
+            
+            columnElm.addEventListener('drop', function (e) {
+            
+                
+                console.log("drop event");
+                console.log("e.target.className: ", e.target.className);
+                if(event.target.className.includes("column")){
+                    e.target.appendChild(onTheMoveElm);
+                    event.target.classList.remove("column-dropable")
+
+                }
+            });
+
+            
+        });
+
+
+
+
+
+
+
+
+
+
+
+        // document.addEventListener('mousedown', function (e) {
+            
+        //     console.log("e.path: ", e.target.className);
+            
+        //     if(e.target.className === "ticket"){
+        //         onTheMoveElm = e.target;
+        //     }
+        // })
+        // document.addEventListener('drop', function (e) {
+            
+        //     console.log("e.path: ", e);
+            
+        //     if(e.target.className === "ticket"){
+        //         onTheMoveElm = e.target;
+        //     }
+        // })
+    </script>
+</body>
+
+</html>
