@@ -29,6 +29,7 @@
             border-radius: 10px;
             padding: 1em;
         }
+
         .app-main .column-dropable {
             background-color: rgb(253, 253, 182);
         }
@@ -59,6 +60,11 @@
             <div class="ticket" draggable="true">task 1</div>
             <div class="ticket" draggable="true">task 2</div>
             <div class="ticket" draggable="true">task 3</div>
+
+            <form id="addTicketForm">
+                <input id="ticketText" type="text" placeholder="enter your task here">
+                <button type="submit" hidden>submit</button>
+            </form>
         </div>
 
         <div class="column">
@@ -70,83 +76,123 @@
     </main>
 
 
-    <script>
+    <script type="module">
+
+        document
+            .querySelector('#addTicketForm')
+            .addEventListener('submit', (event) => {
+                event.preventDefault();
+
+                let userInput = document.querySelector("#ticketText").value;
+
+                let div = document.createElement("div")
+                div.setAttribute("draggable", "true")
+                div.setAttribute("class", "ticket")
+                let t = document.createTextNode(userInput);
+                div.appendChild(t);
+
+                let column = event.target.parentNode;
+                console.log("column: ", column);
+
+                column.insertBefore(div, event.target)
+
+                event.target.reset();
+
+                //<div class="ticket" draggable="true">task 3</div>
+
+
+
+                console.log("submit");
+            });
+
+
 
 
         let onTheMoveElm = undefined;
 
-        allTickets = document.querySelectorAll(".ticket");
+        let allTickets = document.querySelectorAll(".ticket");
 
         allTickets.forEach(ticketElm => {
             ticketElm.addEventListener('mousedown', function (e) {
-            
+
                 console.log("e.target.className: ", e.target.className);
                 onTheMoveElm = e.target;
             })
         });
-        
-        allColumns = document.querySelectorAll(".column");
-        
+
+        let allColumns = document.querySelectorAll(".column");
+
         allColumns.forEach(columnElm => {
-            
+
             columnElm.addEventListener("dragover", (event) => {
                 // prevent default to allow drop
                 event.preventDefault();
-                if(event.target.className === "column"){
+                if (event.target.className === "column") {
                     event.target.classList.add("column-dropable")
                 }
             });
             columnElm.addEventListener("dragleave", (event) => {
-                
+
                 console.log("drag leave event.target.className: ", event.target.className);
                 event.preventDefault();
-                if(event.target.className.includes("column")){
+                if (event.target.className.includes("column")) {
                     event.target.classList.remove("column-dropable")
-                    
+
                 }
             });
-            
+
             columnElm.addEventListener('drop', function (e) {
-            
-                
+
+
                 console.log("drop event");
                 console.log("e.target.className: ", e.target.className);
-                if(event.target.className.includes("column")){
+                if (event.target.className.includes("column")) {
                     e.target.appendChild(onTheMoveElm);
                     event.target.classList.remove("column-dropable")
 
                 }
             });
 
-            
+
         });
 
 
 
 
 
+        // localStorage.setItem("abckey", "some value");
+
+        // let value = localStorage.getItem("obj2");
+
+        // console.log("value: ", value);
+
+
+        // let student = {
+        //     name: "malik",
+        //     subject: "science",
+        //     campus: "gulshan",
+        //     roll: 23,
+        //     books: ['html', 'css', 'js'],
+        //     isActive: true
+        // }
+
+        // let isActive = true;
+        // let student_str = JSON.stringify(isActive);
+        // console.log("student_str: ", student_str);
+
+        // localStorage.setItem("student", student_str);
+
+        // student_str = localStorage.getItem("student");
+        // console.log("student_str: ", student_str);
+
+        // student = JSON.parse(student_str);
+
+        // console.log(student.campus);
 
 
 
 
 
-
-        // document.addEventListener('mousedown', function (e) {
-            
-        //     console.log("e.path: ", e.target.className);
-            
-        //     if(e.target.className === "ticket"){
-        //         onTheMoveElm = e.target;
-        //     }
-        // })
-        // document.addEventListener('drop', function (e) {
-            
-        //     console.log("e.path: ", e);
-            
-        //     if(e.target.className === "ticket"){
-        //         onTheMoveElm = e.target;
-        //     }
-        // })
     </script>
 </body>
 
