@@ -61,8 +61,8 @@
             <div class="ticket" draggable="true">task 2</div>
             <div class="ticket" draggable="true">task 3</div>
 
-            <form id="addTicketForm">
-                <input id="ticketText" type="text" placeholder="enter your task here">
+            <form class="addTicketForm">
+                <input name="ticketText" type="text" placeholder="enter your task here">
                 <button type="submit" hidden>submit</button>
             </form>
         </div>
@@ -71,6 +71,10 @@
             <div class="column-heading">in progress</div>
             <div class="ticket" draggable="true">task 4</div>
 
+            <form class="addTicketForm">
+                <input name="ticketText" type="text" placeholder="enter your task here">
+                <button type="submit" hidden>submit</button>
+            </form>
         </div>
 
     </main>
@@ -78,33 +82,52 @@
 
     <script type="module">
 
+        let existingTicketObj = localStorage.getItem("tickets");
+
+        if (existingTicketObj) {
+            existingTicketObj = JSON.parse(existingTicketObj);
+        } else {
+            existingTicketObj = {};
+        }
+
+
+
+        let ticketSubmitHandler = (event) => {
+            event.preventDefault();
+
+            const userInput = event.target.elements.ticketText.value;
+
+
+            let div = document.createElement("div")
+            div.setAttribute("draggable", "true")
+            div.setAttribute("class", "ticket")
+            let t = document.createTextNode(userInput);
+            div.appendChild(t);
+
+            let column = event.target.parentNode;
+            console.log("column: ", column);
+
+            column.insertBefore(div, event.target)
+
+            console.log(event.target.parentNode.children[0].innerText);
+            const colTitle = event.target.parentNode.children[0].innerText
+
+            if (!existingTicketObj[colTitle]) {
+                existingTicketObj[colTitle] = [];
+            }
+            existingTicketObj[colTitle].push(userInput);
+
+            localStorage.setItem("tickets", JSON.stringify(existingTicketObj));
+            event.target.reset();
+            console.log("submit");
+        }
+
+
         document
-            .querySelector('#addTicketForm')
-            .addEventListener('submit', (event) => {
-                event.preventDefault();
-
-                let userInput = document.querySelector("#ticketText").value;
-
-                let div = document.createElement("div")
-                div.setAttribute("draggable", "true")
-                div.setAttribute("class", "ticket")
-                let t = document.createTextNode(userInput);
-                div.appendChild(t);
-
-                let column = event.target.parentNode;
-                console.log("column: ", column);
-
-                column.insertBefore(div, event.target)
-
-                event.target.reset();
-
-                //<div class="ticket" draggable="true">task 3</div>
-
-
-
-                console.log("submit");
-            });
-
+            .querySelectorAll('.addTicketForm')
+            .forEach(eachForm => {
+                eachForm.addEventListener('submit', ticketSubmitHandler);
+            })
 
 
 
