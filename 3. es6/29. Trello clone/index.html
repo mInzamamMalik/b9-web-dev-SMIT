@@ -54,8 +54,8 @@
         <h1>Trello clone</h1>
     </header>
 
-    <main class="app-main">
-        <div class="column">
+    <main class="app-main" id="app-main">
+        <div class="column" id="Todo">
             <div class="column-heading">Todo</div>
             <div class="ticket" draggable="true">task 1</div>
             <div class="ticket" draggable="true">task 2</div>
@@ -67,7 +67,7 @@
             </form>
         </div>
 
-        <div class="column">
+        <div class="column" id="in progress">
             <div class="column-heading">in progress</div>
             <div class="ticket" draggable="true">task 4</div>
 
@@ -89,6 +89,55 @@
         } else {
             existingTicketObj = {};
         }
+
+        let renderExistingTickets = () => {
+
+
+            // existingTicketObj
+            // {
+            //     "Todo": [
+            //         "abc",
+            //         "sdfsdf",
+            //         "dsffsdf"
+            //     ],
+            //     "in progress": [
+            //         "jhgdhjdsf",
+            //         "dfsdf"
+            //     ]
+            // }
+
+
+
+            for (let key in existingTicketObj) {
+                console.log("key: ", key);
+
+                console.log(existingTicketObj[key]);
+
+                existingTicketObj[key].forEach((eachTicket, index) => {
+                    // create tickets
+
+                    let ticketDiv = document.createElement("div")
+                    ticketDiv.setAttribute("draggable", "true")
+                    ticketDiv.setAttribute("class", "ticket")
+                    let t = document.createTextNode(eachTicket);
+                    ticketDiv.appendChild(t);
+
+                    let column = document.getElementById(key)
+                    column.appendChild(ticketDiv)
+                    // console.log("column: ", column);
+
+                })
+
+            }
+
+
+
+
+
+            // column.insertBefore(div, event.target)
+        }
+        renderExistingTickets()
+
 
 
 
