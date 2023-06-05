@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+    <h1>es6 Class</h1>
+
+
+    <script>
+
+        // data type declearation
+        class Book {
+            constructor(name, author, genre) {
+                console.log("this type is getting constructed");
+
+                this.name = name;
+                this.author = author;
+                this.genre = genre;
+            }
+        }
+
+        let a = 5;// Number
+        let b = new Book("Harry Potter", "JK Rowling", "fiction");
+
+        console.log(b.name);
+
+    </script>
+</body>
+
+</html>
