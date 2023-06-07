@@ -23,12 +23,47 @@
                 this.author = author;
                 this.genre = genre;
             }
+
+            static views = 5
+            static viewIncrement() {
+                console.log("a view is incremented");
+            }
         }
 
         let a = 5;// Number
         let b = new Book("Harry Potter", "JK Rowling", "fiction");
 
         console.log(b.name);
+        console.log(Book.views);
+
+
+        class Risala extends Book {
+            constructor(name, author, genre, weekNumber, com) {
+                console.log("this type is getting constructed");
+
+                super(name, author, genre)
+
+                this.week = weekNumber;
+                this.company = com;
+            }
+        }
+
+        let abc = new Risala("sdfsdf", "sdfsdf", "politics", "2", "express")
+
+        console.log(abc.name);
+        console.log(abc.author);
+        console.log(abc.genre);
+        console.log(abc.week);
+        console.log(abc.company);
+
+
+
+
+
+
+
+
+
 
     </script>
 </body>
