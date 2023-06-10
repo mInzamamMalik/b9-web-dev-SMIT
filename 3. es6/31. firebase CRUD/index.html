@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        #bookDisplayGrid {
+            display: flex;
+            gap: 1em;
+            margin-top: 2rem;
+        }
+
+        #bookDisplayGrid .bookTile {
+            border: 1px solid black;
+            padding: 1em;
+            border-radius: 0.5rem;
+        }
+    </style>
+</head>
+
+<body>
+    <form id="bookAddForm">
+        <label for="bookName"> Book Name: </label>
+        <input type="text" id="bookName">
+        <br>
+        <label for="bookAuthor"> Book Author Name: </label>
+        <input type="text" id="bookAuthor">
+
+        <br>
+        <label for="bookGenre"> Book Genre: </label>
+        <input type="text" id="bookGenre">
+
+        <br>
+        <button type="submit">Add Book to Database</button>
+    </form>
+
+
+    <div id="bookDisplayGrid">
+        <div class="bookTile">
+            <h3>Book Name</h3>
+            <p>book Author - book Genre </p>
+        </div>
+        <div class="bookTile">
+            <h3>Book Name</h3>
+            <p>book Author - book Genre </p>
+        </div>
+        <div class="bookTile">
+            <h3>Book Name</h3>
+            <p>book Author - book Genre </p>
+        </div>
+    </div>
+
+    <script type="module">
+        import { initializeApp,  } from "https://www.gstatic.com/firebasejs/9.22.2/firebase-app.js";
+        import { collection, addDoc, getFirestore } from "https://www.gstatic.com/firebasejs/9.22.2/firebase-firestore.js";
+
+        // Your web app's Firebase configuration
+        const firebaseConfig = {
+            apiKey: "AIzaSyCkRIayjPBxAnow-E1oFAa2wzGT1i8HjG4",
+            authDomain: "smit-b9.firebaseapp.com",
+            projectId: "smit-b9",
+            storageBucket: "smit-b9.appspot.com",
+            messagingSenderId: "359980592837",
+            appId: "1:359980592837:web:4bcf4342a463c1919c0aac"
+        };
+
+        // Initialize Firebase
+        const app = initializeApp(firebaseConfig);
+        const db = getFirestore(app);
+
+        document.addEventListener("submit", async (event) => {
+            event.preventDefault();
+
+            let bookName = document.querySelector("#bookName").value;
+            let bookAuthor = document.querySelector("#bookAuthor").value;
+            let bookGenre = document.querySelector("#bookGenre").value;
+
+            try {
+                const docRef = await addDoc(
+                    collection(db, "books"),
+                    {
+                        bookName: bookName,
+                        bookAuthor: bookAuthor,
+                        bookGenre: bookGenre
+                    });
+                console.log("Document written with ID: ", docRef.id);
+            } catch (e) {
+                console.error("Error adding document: ", e);
+            }
+
+        })
+    </script>
+</body>
+
+</html>
