@@ -8,6 +8,7 @@
     <style>
         #bookDisplayGrid {
             display: flex;
+            flex-wrap: wrap;
             gap: 1em;
             margin-top: 2rem;
         }
@@ -16,6 +17,10 @@
             border: 1px solid black;
             padding: 1em;
             border-radius: 0.5rem;
+        }
+
+        .hidden {
+            display: none;
         }
     </style>
 </head>
@@ -38,23 +43,12 @@
 
 
     <div id="bookDisplayGrid">
-        <div class="bookTile">
-            <h3>Book Name</h3>
-            <p>book Author - book Genre </p>
-        </div>
-        <div class="bookTile">
-            <h3>Book Name</h3>
-            <p>book Author - book Genre </p>
-        </div>
-        <div class="bookTile">
-            <h3>Book Name</h3>
-            <p>book Author - book Genre </p>
-        </div>
+        <div id="loading" class="">Loading...</div>
     </div>
 
     <script type="module">
-        import { initializeApp,  } from "https://www.gstatic.com/firebasejs/9.22.2/firebase-app.js";
-        import { collection, addDoc, getFirestore } from "https://www.gstatic.com/firebasejs/9.22.2/firebase-firestore.js";
+        import { initializeApp, } from "https://www.gstatic.com/firebasejs/9.22.2/firebase-app.js";
+        import { collection, addDoc, getFirestore, getDocs, onSnapshot, serverTimestamp, query, orderBy } from "https://www.gstatic.com/firebasejs/9.22.2/firebase-firestore.js";
 
         // Your web app's Firebase configuration
         const firebaseConfig = {
@@ -83,7 +77,8 @@
                     {
                         bookName: bookName,
                         bookAuthor: bookAuthor,
-                        bookGenre: bookGenre
+                        bookGenre: bookGenre,
+                        createdAt: serverTimestamp()
                     });
                 console.log("Document written with ID: ", docRef.id);
             } catch (e) {
@@ -91,6 +86,80 @@
             }
 
         })
+
+
+        // document.addEventListener("readystatechange", async (event) => {
+        //     console.log(`readystate: ${document.readyState}`)
+        //     let loading = document.querySelector("#loading");\
+
+        //     const q = collection(db, "books");
+        //     const querySnapshot = await getDocs(q);
+
+        //     loading.classList.add("hidden")
+        //     console.log("querySnapshot: ", querySnapshot.size);
+
+        //     if(querySnapshot.size === 0 ){
+        //         let bookGrid = document.querySelector("#bookDisplayGrid");
+        //         bookGrid.innerHTML = `<div>No Books found</div>`
+        //     }
+        //     querySnapshot.forEach((doc) => {
+
+        //         let data = doc.data()
+        //         console.log(doc.id, " => ", data);
+        //         let bookGrid = document.querySelector("#bookDisplayGrid");
+
+        //         bookGrid.innerHTML += `
+        //         <div class="bookTile">
+        //             <h3>${data.bookName}</h3>
+        //             <p>${data.bookAuthor} - ${data.bookGenre} </p>
+        //         </div>
+        //         `;
+
+        //     });
+        // });
+        document.addEventListener("readystatechange", (event) => {
+            console.log(`readystate: ${document.readyState}`)
+            let loading = document.querySelector("#loading");
+
+            const q = query( collection(db, "books"), orderBy("createdAt", "desc") );
+
+            const unsubscribe = onSnapshot(q, (querySnapshot) => {
+
+                if (querySnapshot.size === 0) {
+                    let bookGrid = document.querySelector("#bookDisplayGrid");
+                    bookGrid.innerHTML = `<div>No Books found</div>`
+                }
+
+                let bookGrid = document.querySelector("#bookDisplayGrid");
+                bookGrid.innerHTML = '';
+                loading.classList.add("hidden")
+
+                querySnapshot.forEach((doc) => {
+
+                    let bookGrid = document.querySelector("#bookDisplayGrid");
+                    
+                    let data = doc.data()
+                    console.log("doc.data(): ", data);
+
+                    bookGrid.innerHTML += `
+                        <div class="bookTile">
+                            <h3>${data.bookName}</h3>
+                            <p>${data.bookAuthor} - ${data.bookGenre} </p>
+                        </div>
+                        `;
+                });
+            });
+
+            // console.log("querySnapshot: ", querySnapshot.size);
+
+
+            // querySnapshot.forEach((doc) => {
+
+            //     console.log(doc.id, " => ", data);
+            //     
+
+            // });
+        });
     </script>
 </body>
 
