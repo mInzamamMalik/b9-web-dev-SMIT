@@ -48,7 +48,11 @@
 
     <script type="module">
         import { initializeApp, } from "https://www.gstatic.com/firebasejs/9.22.2/firebase-app.js";
-        import { collection, addDoc, getFirestore, getDocs, onSnapshot, serverTimestamp, query, orderBy } from "https://www.gstatic.com/firebasejs/9.22.2/firebase-firestore.js";
+        import {
+            collection, addDoc, getFirestore,
+            getDocs, onSnapshot, serverTimestamp,
+            query, orderBy, deleteDoc, doc, updateDoc
+        } from "https://www.gstatic.com/firebasejs/9.22.2/firebase-firestore.js";
 
         // Your web app's Firebase configuration
         const firebaseConfig = {
@@ -64,28 +68,29 @@
         const app = initializeApp(firebaseConfig);
         const db = getFirestore(app);
 
-        document.addEventListener("submit", async (event) => {
-            event.preventDefault();
+        document.querySelector('#bookAddForm')
+            .addEventListener("submit", async (event) => {
+                event.preventDefault();
 
-            let bookName = document.querySelector("#bookName").value;
-            let bookAuthor = document.querySelector("#bookAuthor").value;
-            let bookGenre = document.querySelector("#bookGenre").value;
+                let bookName = document.querySelector("#bookName").value;
+                let bookAuthor = document.querySelector("#bookAuthor").value;
+                let bookGenre = document.querySelector("#bookGenre").value;
 
-            try {
-                const docRef = await addDoc(
-                    collection(db, "books"),
-                    {
-                        bookName: bookName,
-                        bookAuthor: bookAuthor,
-                        bookGenre: bookGenre,
-                        createdAt: serverTimestamp()
-                    });
-                console.log("Document written with ID: ", docRef.id);
-            } catch (e) {
-                console.error("Error adding document: ", e);
-            }
+                try {
+                    const docRef = await addDoc(
+                        collection(db, "books"),
+                        {
+                            bookName: bookName,
+                            bookAuthor: bookAuthor,
+                            bookGenre: bookGenre,
+                            createdAt: serverTimestamp()
+                        });
+                    console.log("Document written with ID: ", docRef.id);
+                } catch (e) {
+                    console.error("Error adding document: ", e);
+                }
 
-        })
+            })
 
 
         // document.addEventListener("readystatechange", async (event) => {
@@ -121,7 +126,7 @@
             console.log(`readystate: ${document.readyState}`)
             let loading = document.querySelector("#loading");
 
-            const q = query( collection(db, "books"), orderBy("createdAt", "desc") );
+            const q = query(collection(db, "books"), orderBy("createdAt", "desc"));
 
             const unsubscribe = onSnapshot(q, (querySnapshot) => {
 
@@ -137,28 +142,63 @@
                 querySnapshot.forEach((doc) => {
 
                     let bookGrid = document.querySelector("#bookDisplayGrid");
-                    
+
                     let data = doc.data()
-                    console.log("doc.data(): ", data);
+                    console.log("doc.data(): ", doc.id);
 
                     bookGrid.innerHTML += `
-                        <div class="bookTile">
+                        <div class="bookTile" id="book${doc.id}">
                             <h3>${data.bookName}</h3>
                             <p>${data.bookAuthor} - ${data.bookGenre} </p>
+                            <button onclick="deleteBook('${doc.id}')">Delete</button>
+                            <button onclick="editBook('${doc.id}', '${data.bookName}', '${data.bookAuthor}', '${data.bookGenre}')">Edit</button>
+
                         </div>
                         `;
                 });
             });
 
-            // console.log("querySnapshot: ", querySnapshot.size);
+            window.editBook = async (docId, name, author, genre) => {
+                console.log("editBook function called: ", docId, name, author, genre);
+
+                let bookContainer = document.querySelector(`#book${docId}`);
+
+                bookContainer.innerHTML = `
+                <form onsubmit="completeEdit(event, '${docId}' )">
+                    Book: <input name="name" type="text" value="${name}">
+                    <br>
+                    Author: <input name="author" type="text" value="${author}">
+                    <br>
+                    Genre: <input name="genre" type="text" value="${genre}">
+                    <br>
+                    <button type="submit">Save</button>
+                </form>
+                `
+
+            }
+
+            window.completeEdit = async (e, docId) => {
+                e.preventDefault();
+                console.log("completeEdit called: ", docId);
+
+                console.log("e.target.author: ", e.target.name.value);
+                console.log("e.target.author: ", e.target.author.value);
+                console.log("e.target.author: ", e.target.genre.value);
 
 
-            // querySnapshot.forEach((doc) => {
+                await updateDoc(doc(db, 'books', docId),
+                    {
+                        bookName: e.target.name.value,
+                        bookAuthor: e.target.author.value,
+                        bookGenre: e.target.genre.value,
+                    });
+            }
 
-            //     console.log(doc.id, " => ", data);
-            //     
+            window.deleteBook = async (docId) => {
+                console.log("deleteBook function called: ", docId);
 
-            // });
+                await deleteDoc(doc(db, "books", docId));
+            }
         });
     </script>
 </body>
