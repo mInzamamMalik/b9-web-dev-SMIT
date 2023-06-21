@@ -51,3 +51,14 @@ const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => {
     console.log(`Example server listening on port ${PORT}`)
 })
+
+
+// google cloud - Google Compute engine;
+// AWS - ES2 instance
+
+// micro service architecture
+// google app engine - cyclic - railway app - heroku - aws elastic beanstalk
+
+// very cheap - per call charge - short lived
+// nano service architecture
+// google cloud functions - aws lambda functions - netlify functions
