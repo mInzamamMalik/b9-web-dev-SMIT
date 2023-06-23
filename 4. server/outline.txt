@@ -1,0 +1,25 @@
+express:
+
+- hello world express server
+- run hello world server on local network
+- deploy hello world server on cloud
+
+- make small apis and integrate with frontend 
+- host frontend with express static 
+
+- ways of input in express apis (url params, query params, req header and body )
+- ways of output in express apis (res.send, res.json, res.sendFile )
+
+- how routing path works
+- what is middleware function and next();
+
+- login signup - with local variables
+
+- database connection
+- mongodb CRUD
+
+- login signup with JWT and https-only cookies
+
+- file upload (from front end to server and server to storage bucket)
+
+

@@ -1,9 +1,10 @@
 import express from 'express';
 import cors from 'cors';
-import path  from 'path';
+import path from 'path';
 const __dirname = path.resolve();
 
 const app = express();
+app.use(express.json()); // body parser
 // app.use(cors())
 
 
@@ -11,8 +12,25 @@ app.get('/profile', (req, res) => {
     console.log('this is profile!', new Date());
     res.send('this is profile' + new Date());
 })
+
+
+//  http://abcweather.com/weather/karachi?unit=metric&side=west&age=23
+
 app.get('/weather/:cityName', (req, res) => {
     console.log('this is profile!', new Date());
+
+    console.log("req.params.cityName: ", req.params.cityName)
+
+    console.log("req.query.unit: ", req.query.unit)
+    console.log("req.query.side: ", req.query.side)
+    console.log("req.query.age: ", req.query.age)
+
+    console.log("req.body.name: ", req.body.name)
+    console.log("req.body.class: ", req.body.class)
+    console.log("req.body.rollNumber: ", req.body.rollNumber)
+
+
+
 
     let weatherData = {
         karachi: {
@@ -42,6 +60,25 @@ app.get('/weather/:cityName', (req, res) => {
         res.status(404)
             .send(`weather data is not available for ${req.params.cityName}`);
     }
+})
+
+let comments = [];
+app.post('/comment/:name', (req, res, next) => {
+    const name = req.params.name;
+    const comment = req.body.comment;
+
+    comments.push({
+        name: name,
+        comment: comment
+    })
+
+    res.send({
+        message: "comment posted successfully"
+    });
+
+})
+app.get('/comments', (req, res, next) => {
+    res.send(comments);
 })
 
 
