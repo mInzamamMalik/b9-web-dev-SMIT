@@ -10,7 +10,9 @@ express:
 - ways of input in express apis (url params, query params, req header and body )
 - ways of output in express apis (res.send, res.json, res.sendFile )
 
-- how routing path works
+- 5 principles of rest api
+
+- how routing path works - mini router
 - what is middleware function and next();
 
 - login signup - with local variables
