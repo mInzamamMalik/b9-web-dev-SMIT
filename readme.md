@@ -1,3 +1,10 @@
+# Class recordings YouTube Playlist:
+
+https://www.youtube.com/playlist?list=PLaZSdijfCCJBBYHc8r6ylLTJ__18XrKqL
+
+
+
+
 ## List of Enrolled Students:
 <br>
 
