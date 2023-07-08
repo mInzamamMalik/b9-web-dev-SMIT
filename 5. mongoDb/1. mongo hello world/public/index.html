@@ -119,9 +119,9 @@
         const getAllComments = async () => {
             const axiosResponse = await axios.get("/comments");
 
-            console.log(axiosResponse.data); // []
+            console.log("axiosResponse", axiosResponse); // []
 
-            axiosResponse.data.map((eachComment) => {
+            axiosResponse?.data?.data.map((eachComment) => {
                 document.querySelector("#previousComments").innerHTML +=
                     `<div class="comment">
                         <h4 class="commentName">${eachComment.name}:</h4>

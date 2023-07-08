@@ -10,9 +10,9 @@ const commentsSchema = new mongoose.Schema({
 export const commentsModel = mongoose.model("comments", commentsSchema);
 
 // connecting mongodb with my app with mongoose
-const mongodbURI =
-  process.env.mongodbURI ||
-  "mongodb+srv://dbuser:<yourpassword>@cluster0.gq9n2zr.mongodb.net/abcdatabase?retryWrites=true&w=majority";
+const mongodbURI = 
+    process.env.mongodbURI ||
+    "mongodb+srv://dbuser:dbpassword@cluster0.gq9n2zr.mongodb.net/abcdatabase?retryWrites=true&w=majority";
 
 export const connectDB = async () => {
   try {
