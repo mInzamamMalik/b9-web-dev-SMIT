@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        .comment {
+            border: 1px solid black;
+            margin-top: 1rem;
+            border-radius: 20px;
+            padding: 1rem;
+        }
+    </style>
+</head>
+
+<body>
+    <h1>My Dummy weather app </h1>
+
+    <form onsubmit="getWeather(); return false">
+
+        <label for="cityName">city:</label>
+        <input type="text" name="cityName" id="cityName" placeholder="enter your city name">
+
+        <br>
+
+        <button type="submit">Get Weather</button>
+    </form>
+
+    <div id="result"></div>
+
+
+    <div id="comments">
+        <h2>Comments</h2>
+        <form id="postCommentForm">
+
+            <input type="text" id="nameInput" placeholder="Your Name">
+            <input type="text" id="commentInput" placeholder="Enter your comment here">
+            <button type="submit">Post</button>
+        </form>
+
+        <div id="previousComments">
+
+
+        </div>
+    </div>
+
+
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.js"></script>
+    <script type="module">
+
+        let name = "alice"
+
+        window.getWeather = function () {
+
+            let cityName = document.querySelector("#cityName").value;
+
+            axios.get(`/weather/${cityName}`)
+                .then(function (response) {
+                    // handle success
+                    console.log(response.data);
+                    // {
+                    //     city: 'Beijing',
+                    //     tempInC: 30,
+                    //     humidity: 56,
+                    //     high: 32,
+                    //     low: 18
+                    // }
+
+                    document.querySelector("#result").innerHTML =
+                        `current temperature is ${response.data.tempInC}°C`
+
+                })
+                .catch(function (error) {
+                    // handle error
+                    console.log(error.data);
+                    document.querySelector("#result").innerHTML = "error in getting weather data"
+                })
+
+
+
+        }
+
+        document
+            .querySelector("#postCommentForm")
+            .addEventListener("submit", async (event) => {
+                event.preventDefault();
+
+                let nameInput = document.querySelector("#nameInput").value;
+                let commentInput = document.querySelector("#commentInput").value;
+
+                try {
+                    const axiosResponse = await axios.post(`/comment/${nameInput}`, {
+                        comment: commentInput
+                    })
+
+                    // {
+                    //     message: "comment posted successfully"
+                    // }
+                    console.log(axiosResponse.data);
+
+                    document.querySelector("#previousComments").innerHTML +=
+                        `<div class="comment">
+                        <h4 class="commentName">${nameInput}:</h4>
+                        <p class="commentText">${commentInput}</p>
+                    </div>`
+
+                } catch (error) {
+                    // handle error
+                    console.log(error.data);
+                    document.querySelector("#result").innerHTML = "error in getting weather data"
+                }
+
+
+            })
+
+
+        const getAllComments = async () => {
+            const axiosResponse = await axios.get("/comments");
+
+            console.log(axiosResponse.data); // []
+
+            axiosResponse.data.map((eachComment) => {
+                document.querySelector("#previousComments").innerHTML +=
+                    `<div class="comment">
+                        <h4 class="commentName">${eachComment.name}:</h4>
+                        <p class="commentText">${eachComment.comment}</p>
+                    </div>`
+            })
+
+
+
+        }
+        setTimeout(() => {
+            getAllComments();
+        }, 100)
+
+    </script>
+
+</body>
+
+</html>
