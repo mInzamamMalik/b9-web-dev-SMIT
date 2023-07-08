@@ -63,6 +63,7 @@ app.get('/weather/:cityName', (req, res) => {
 })
 
 let comments = [];
+
 app.post('/comment/:name', (req, res, next) => {
     const name = req.params.name;
     const comment = req.body.comment;
