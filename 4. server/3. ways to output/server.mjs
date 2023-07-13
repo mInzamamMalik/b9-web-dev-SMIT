@@ -54,3 +54,28 @@ app.listen(PORT, () => {
 // very cheap - per call charge - short lived
 // nano service architecture
 // google cloud functions - aws lambda functions - netlify functions
+
+
+
+
+
+// GET     /api/v1/post/:userId/:postId
+// GET     /api/v1/posts/:userId
+// POST    /api/v1/post
+// PUT     /api/v1/post/:userId/:postId
+// DELETE  /api/v1/post/:userId/:postId
+
+// GET     /api/v2/post/:userId/:postId
+// GET     /api/v2/posts/:userId
+// POST    /api/v2/post
+// PUT     /api/v2/post/:userId/:postId
+// DELETE  /api/v2/post/:userId/:postId
+
+// GET     /v1/comment/:userId/:commentId
+// GET     /v1/comments/:userId
+// POST    /v1/comment
+// PUT     /v1/comment/:userId/:commentId
+// DELETE  /v1/comment/:userId/:postId
+
+
+// GET     /feed/:userId
