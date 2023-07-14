@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        .comment {
+            border: 1px solid black;
+            margin-top: 1rem;
+            border-radius: 20px;
+            padding: 1rem;
+        }
+    </style>
+</head>
+
+<body>
+
+    <a href="/static/vscode_windows.exe">vscode windows download</a>
+    <br>
+    <a href="/static/vscode_mac.zip">vscode mac download</a>
+
+    <br>
+
+
+    <h1>My Dummy weather app </h1>
+
+    <form onsubmit="getWeather(); return false">
+
+        <label for="cityName">city:</label>
+        <input type="text" name="cityName" id="cityName" placeholder="enter your city name">
+
+        <br>
+
+        <button type="submit">Get Weather</button>
+    </form>
+
+    <div id="result"></div>
+
+
+
+
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.js"></script>
+    <script type="module">
+
+        let name = "alice"
+
+        window.getWeather = function () {
+
+            let cityName = document.querySelector("#cityName").value;
+
+            axios.post(`/weather`, {
+                cityName: cityName
+            })
+                .then(function (response) {
+                    // handle success
+                    console.log(response.data);
+                    // {
+                    //     city: 'Beijing',
+                    //     tempInC: 30,
+                    //     humidity: 56,
+                    //     high: 32,
+                    //     low: 18
+                    // }
+
+                    document.querySelector("#result").innerHTML = response.data.temp;
+
+                })
+                .catch(function (error) {
+                    // handle error
+                    console.log(error.data);
+                    document.querySelector("#result").innerHTML = "error in getting weather data"
+                })
+        }
+
+    </script>
+
+</body>
+
+</html>
