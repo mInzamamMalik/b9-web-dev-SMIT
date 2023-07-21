@@ -15,64 +15,84 @@
     </style>
 </head>
 
-<body>
-
-    <a href="/static/vscode_windows.exe">vscode windows download</a>
-    <br>
-    <a href="/static/vscode_mac.zip">vscode mac download</a>
-
-    <br>
+<body onload="getAllPost()">
 
 
-    <h1>My Dummy weather app </h1>
+    <h1>My post CRUD app </h1>
 
-    <form onsubmit="getWeather(); return false">
+    <form onsubmit="createPost(); return false">
 
-        <label for="cityName">city:</label>
-        <input type="text" name="cityName" id="cityName" placeholder="enter your city name">
+        <h2>Create a post:</h2>
+
+        <label for="postTitle">title:</label>
+        <input type="text" name="postTitle" id="postTitle" placeholder="enter your city name">
+
+        <br>
+        <label for="postText">Text:</label>
+        <input type="text" name="postText" id="postText" placeholder="enter your city name">
 
         <br>
 
-        <button type="submit">Get Weather</button>
+        <button type="submit">submit post</button>
+
+        <br>
+        <br>
+        <br>
     </form>
 
     <div id="result"></div>
+    <br>
+    <br>
+    <div id="posts"></div>
 
 
 
 
     <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.js"></script>
+
+    <script type="module" src="app.mjs"></script>
     <script type="module">
 
-        let name = "alice"
+        window.createPost = function () {
 
-        window.getWeather = function () {
+            let postTitle = document.querySelector("#postTitle").value;
+            let postText = document.querySelector("#postText").value;
 
-            let cityName = document.querySelector("#cityName").value;
-
-            axios.post(`/weather`, {
-                cityName: cityName
+            // baseUrl/api/v1/post
+            axios.post(`/api/v1/post`, {
+                title: postTitle,
+                text: postText
             })
                 .then(function (response) {
-                    // handle success
                     console.log(response.data);
-                    // {
-                    //     city: 'Beijing',
-                    //     tempInC: 30,
-                    //     humidity: 56,
-                    //     high: 32,
-                    //     low: 18
-                    // }
-
-                    document.querySelector("#result").innerHTML = response.data.temp;
-
+                    document.querySelector("#result").innerHTML = response.data;
+                    getAllPost();
                 })
                 .catch(function (error) {
                     // handle error
                     console.log(error.data);
-                    document.querySelector("#result").innerHTML = "error in getting weather data"
+                    document.querySelector("#result").innerHTML = "error in post submission"
                 })
         }
+
+        window.getAllPost = function () {
+
+
+            // baseUrl/api/v1/post
+            axios.get(`/api/v1/posts`)
+                .then(function (response) {
+                    console.log(response.data);
+
+                    document.querySelector("#posts").innerHTML = JSON.stringify(response.data);
+                })
+                .catch(function (error) {
+                    // handle error
+                    console.log(error.data);
+                    document.querySelector("#result").innerHTML = "error in post submission"
+                })
+        }
+
+
 
     </script>
 

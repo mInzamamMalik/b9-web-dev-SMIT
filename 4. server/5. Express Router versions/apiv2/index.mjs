@@ -13,6 +13,7 @@ router.use(authRouter)
 
 
 router.use((req, res, next) => {
+    const token = "valid";
     if (token === "valid") {
         next();
     } else {
@@ -20,9 +21,9 @@ router.use((req, res, next) => {
     }
 })
 
-router.use("/api/v1", commentRouter)
-router.use("/api/v1", postRouter)
-router.use("/api/v1", feedRouter)
+router.use(commentRouter)
+router.use(postRouter)
+router.use(feedRouter)
 
 
 router.post("/weather", (req, res, next) => {

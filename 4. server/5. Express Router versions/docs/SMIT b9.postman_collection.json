@@ -1,0 +1,98 @@
+{
+	"info": {
+		"_postman_id": "884bc4b6-dec6-4b06-99f2-06c6f37b896b",
+		"name": "SMIT b9",
+		"description": "this is api doc for my server",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "238480"
+	},
+	"item": [
+		{
+			"name": "v1",
+			"item": [
+				{
+					"name": "auth",
+					"item": []
+				},
+				{
+					"name": "posts",
+					"item": [
+						{
+							"name": "create post",
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n    \"id\": 12,\n    \"title\": \"new post\",\n    \"text\": \"some text\"\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "localhost:3001/api/v1/post",
+									"host": [
+										"localhost"
+									],
+									"port": "3001",
+									"path": [
+										"api",
+										"v1",
+										"post"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "get all post",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{baseUrl}}/api/v1/posts",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"api",
+										"v1",
+										"posts"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "get a post with id",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{baseUrl}}/api/v1/post/341",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"api",
+										"v1",
+										"post",
+										"341"
+									]
+								}
+							},
+							"response": []
+						}
+					],
+					"description": "this api is create for crud operation in post"
+				}
+			]
+		},
+		{
+			"name": "v2",
+			"item": []
+		}
+	]
+}
