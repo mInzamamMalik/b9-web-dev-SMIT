@@ -1,6 +1,11 @@
 
 import express from 'express';
 import { nanoid } from 'nanoid'
+import { client } from './../mongodb.mjs'
+
+const db = client.db("cruddb");
+const col = db.collection("posts");
+
 let router = express.Router()
 
 // not recommended at all - server should be stateless
@@ -13,7 +18,7 @@ let posts = [
 ]
 
 // POST    /api/v1/post
-router.post('/post', (req, res, next) => {
+router.post('/post', async (req, res, next) => {
     console.log('this is signup!', new Date());
 
     if (
@@ -30,21 +35,28 @@ router.post('/post', (req, res, next) => {
         return;
     }
 
-    posts.unshift({
+    const insertResponse = await col.insertOne({
         id: nanoid(),
         title: req.body.title,
         text: req.body.text,
-    })
+    });
+    console.log("insertResponse: ", insertResponse);
 
     res.send('post created');
 })
-// GET     /api/v1/posts
-router.get('/posts', (req, res, next) => {
-    console.log('this is signup!', new Date());
-    res.send(posts);
+
+
+router.get('/posts', async (req, res, next) => {
+
+    const cursor = col.find({});
+    let results = await cursor.toArray()
+    console.log("results: ", results);
+    res.send(results);
 })
 
-// GET     /api/v1/post/:postId
+
+
+
 router.get('/post/:postId', (req, res, next) => {
     console.log('this is signup!', new Date());
 
