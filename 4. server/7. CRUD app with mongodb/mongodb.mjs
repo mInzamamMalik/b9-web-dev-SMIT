@@ -1,6 +1,5 @@
 import { MongoClient } from 'mongodb'
 
-
 const uri = "mongodb+srv://dbuser:dbpassword@cluster0.9ha3mra.mongodb.net/?retryWrites=true&w=majority";
 export const client = new MongoClient(uri);
 
@@ -9,7 +8,7 @@ async function run() {
         await client.connect();
         console.log("Successfully connected to Atlas");
     } catch (err) {
-        console.log(err.stack);
+        console.log(err);
         await client.close();
         process.exit(1)
     }

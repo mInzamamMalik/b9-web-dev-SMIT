@@ -2,6 +2,7 @@
 import express from 'express';
 import { nanoid } from 'nanoid'
 import { client } from './../mongodb.mjs'
+import { ObjectId } from 'mongodb'
 
 const db = client.db("cruddb");
 const col = db.collection("posts");
@@ -35,42 +36,65 @@ router.post('/post', async (req, res, next) => {
         return;
     }
 
-    const insertResponse = await col.insertOne({
-        id: nanoid(),
-        title: req.body.title,
-        text: req.body.text,
-    });
-    console.log("insertResponse: ", insertResponse);
+    try {
+        const insertResponse = await col.insertOne({
+            // _id: "7864972364724b4h2b4jhgh42",
+            id: nanoid(),
+            title: req.body.title,
+            text: req.body.text,
+        });
+        console.log("insertResponse: ", insertResponse);
 
-    res.send('post created');
+        res.send('post created');
+    } catch (e) {
+        console.log("error inserting mongodb: ", e);
+        res.status(500).send('server error, please try later');
+    }
 })
 
 
 router.get('/posts', async (req, res, next) => {
 
     const cursor = col.find({});
-    let results = await cursor.toArray()
-    console.log("results: ", results);
-    res.send(results);
+    try {
+        let results = await cursor.toArray()
+        console.log("results: ", results);
+        res.send(results);
+    } catch (e) {
+        console.log("error getting data mongodb: ", e);
+        res.status(500).send('server error, please try later');
+    }
 })
 
 
+// [92133,92254, 92255 ]
 
-
-router.get('/post/:postId', (req, res, next) => {
+router.get('/post/:postId', async (req, res, next) => {
     console.log('this is signup!', new Date());
 
-    if (req.params.postId) {
+    if (!req.params.postId) {
         res.status(403).send(`post id must be a valid number, no alphabet is allowed in post id`)
     }
 
-    for (let i = 0; i < posts.length; i++) {
-        if (posts[i].id === req.params.postId) {
-            res.send(posts[i]);
-            return;
-        }
+    const cursor = col.find({ _id: new ObjectId(req.params.postId) });
+
+    // const cursor = col.find({ price: { $lte: 77 } });
+    // const cursor = col.find({
+    //     $or: [
+    //         { _id: req.params.postId },
+    //         { title: "dfsdf sdfsdf" }
+    //     ]
+    // })
+
+
+    try {
+        let results = await cursor.toArray()
+        console.log("results: ", results); // [{...}] []
+        res.send(results);
+    } catch (e) {
+        console.log("error getting data mongodb: ", e);
+        res.status(500).send('server error, please try later');
     }
-    res.send('post not found with id ' + req.params.postId);
 })
 
 // PUT     /api/v1/post/:userId/:postId
@@ -124,3 +148,5 @@ router.delete('/post/:postId', (req, res, next) => {
 })
 
 export default router
+
+

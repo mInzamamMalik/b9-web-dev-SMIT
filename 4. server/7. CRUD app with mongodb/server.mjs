@@ -19,7 +19,7 @@ app.use(express.json()); // body parser
 app.use("/api/v1", authRouter)
 
 
-app.use((req, res, next) => {
+app.use((req, res, next) => { // JWT
     let token = "valid"
     if (token === "valid") {
         next();
@@ -29,7 +29,7 @@ app.use((req, res, next) => {
 })
 
 
-app.use("/api/v1", postRouter)
+app.use("/api/v1", postRouter) // Secure api
 
 
 
