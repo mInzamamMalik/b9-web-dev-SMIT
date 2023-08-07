@@ -18,16 +18,14 @@ app.use(express.json()); // body parser
 // /api/v1/login
 app.use("/api/v1", authRouter)
 
-
 app.use((req, res, next) => { // JWT
     let token = "valid"
     if (token === "valid") {
         next();
     } else {
-        res.send({ message: "invalid token" })
+        res.status(401).send({ message: "invalid token" })
     }
 })
-
 
 app.use("/api/v1", postRouter) // Secure api
 

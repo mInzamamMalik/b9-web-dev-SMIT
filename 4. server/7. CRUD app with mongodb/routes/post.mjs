@@ -9,14 +9,7 @@ const col = db.collection("posts");
 
 let router = express.Router()
 
-// not recommended at all - server should be stateless
-let posts = [
-    {
-        id: nanoid(),
-        title: "abc post title",
-        text: "some post text"
-    }
-]
+
 
 // POST    /api/v1/post
 router.post('/post', async (req, res, next) => {
