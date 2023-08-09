@@ -2,10 +2,12 @@
 import express from 'express';
 let router = express.Router()
 import { client } from './../mongodb.mjs'
-import { 
+import jwt from 'jsonwebtoken';
+import {
     stringToHash,
-    varifyHash 
-} from "bcrypt-inzi"
+    varifyHash
+} from "bcrypt-inzi";
+
 
 const userCollection = client.db("cruddb").collection("users");
 
@@ -42,9 +44,21 @@ router.post('/login', async (req, res, next) => {
 
             if (isMatch) {
                 
-                
+                const token = jwt.sign({
+                    isAdmin: false,
+                    firstName: result.firstName,
+                    lastName: result.lastName,
+                    email: req.body.email,
+                }, process.env.SECRET, {
+                    expiresIn: '24h'
+                });
 
-                // TODO: create token for this user
+                res.cookie('token', token, {
+                    httpOnly: true,
+                    secure: true,
+                    expires: new Date(dateAfter2MinInMili)
+                });
+
                 res.send({
                     message: "login successful"
                 });
@@ -61,9 +75,6 @@ router.post('/login', async (req, res, next) => {
         console.log("error getting data mongodb: ", e);
         res.status(500).send('server error, please try later');
     }
-
-
-
 })
 router.post('/signup', async (req, res, next) => {
 

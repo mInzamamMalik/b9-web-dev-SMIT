@@ -34,6 +34,7 @@ router.post('/post', async (req, res, next) => {
             // _id: "7864972364724b4h2b4jhgh42",
             title: req.body.title,
             text: req.body.text,
+            from: req.body.decoded.email,
             createdOn: new Date()
         });
         console.log("insertResponse: ", insertResponse);
