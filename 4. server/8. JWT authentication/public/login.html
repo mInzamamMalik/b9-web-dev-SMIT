@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+    <h1>Login Page:</h1>
+
+    <form id="loginForm">
+
+        <label for="emailInput">email:</label>
+        <input type="email" name="emailInput" id="emailInput" required>
+
+        <br>
+        <label for="passwordInput">password:</label>
+        <input type="text" name="passwordInput" id="passwordInput">
+
+        <br>
+
+        <button type="submit">Login</button>
+
+        <br>
+        <br>
+        <br>
+    </form>
+
+
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.js"></script>
+    <script type="module">
+
+        document.querySelector('#loginForm')
+            .addEventListener('submit', async (event) => {
+                event.preventDefault();
+
+                const email = document.querySelector('#emailInput').value;
+                const password = document.querySelector('#passwordInput').value;
+
+
+                try {
+                    const resp = await axios.post("/api/v1/login", {
+                        email: email,
+                        password: password
+                    })
+
+                    console.log("response: ", resp.status)
+
+                    if (resp.status === 200) {
+                        window.location.href = "/index.html";
+                    }
+
+                } catch (e) {
+                    console.log(e)
+                }
+
+            })
+
+    </script>
+
+</body>
+
+</html>
