@@ -1,0 +1,46 @@
+div.last {
+    color: red;
+}
+
+
+
+div.post {
+    /* border: 1px solid black; */
+    margin: 2rem;
+    padding: 1.5rem;
+    box-shadow: rgba(0, 0, 0, 0.3) 0px 19px 38px, rgba(0, 0, 0, 0.22) 0px 15px 12px;
+}
+div.post h1{
+    margin-bottom: 0;
+}
+div.post > .postHead{
+    display: flex;
+    gap: 0.5rem;
+    margin-bottom: 0.7rem;
+}
+div.post > .postHead > img{
+    border-radius: 50%;
+}
+
+div.post .date{
+    color: #BABABC;
+}
+
+div.post > .postImg {
+    width: 100%;
+}
+
+div.postFooter{
+    display: flex;   
+    justify-content: space-around;
+}
+
+div.postFooter .button{
+    color: #59626B;
+    background-color: #F2F2F2;
+    border-radius: 8px;
+    padding: 0.3rem 1rem;
+    margin: 0 1rem;
+    flex-grow: 1;
+    text-align: center;
+}
