@@ -10,32 +10,35 @@ div.post {
     padding: 1.5rem;
     box-shadow: rgba(0, 0, 0, 0.3) 0px 19px 38px, rgba(0, 0, 0, 0.22) 0px 15px 12px;
 }
-div.post h1{
+
+div.post h1 {
     margin-bottom: 0;
 }
-div.post > .postHead{
+
+div.post>.postHead {
     display: flex;
     gap: 0.5rem;
     margin-bottom: 0.7rem;
 }
-div.post > .postHead > img{
+
+div.post>.postHead>img {
     border-radius: 50%;
 }
 
-div.post .date{
+div.post .date {
     color: #BABABC;
 }
 
-div.post > .postImg {
+div.post>.postImg {
     width: 100%;
 }
 
-div.postFooter{
-    display: flex;   
+div.postFooter {
+    display: flex;
     justify-content: space-around;
 }
 
-div.postFooter .button{
+div.postFooter .button {
     color: #59626B;
     background-color: #F2F2F2;
     border-radius: 8px;
@@ -43,4 +46,24 @@ div.postFooter .button{
     margin: 0 1rem;
     flex-grow: 1;
     text-align: center;
+}
+
+
+
+html,
+body,
+#root,
+.room {
+    height: 100%;
+    margin: 0;
+}
+
+.lit {
+    background-color: white;
+    color: black;
+}
+
+.dark {
+    background-color: black;
+    color: white;
 }
