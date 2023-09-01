@@ -47,8 +47,8 @@ const Home = () => {
       <hr />
 
       {weatherData.length ? (
-        weatherData.map((eachWeatherDate, index) => {
-          return <WeatherCard key={index} weatherData={eachWeatherDate} />;
+        weatherData.map((eachWeatherData, index) => {
+          return <WeatherCard key={index} weatherData={eachWeatherData} />;
         })
       ) : (
         <div>No Data</div>
