@@ -11,10 +11,10 @@ const Home = () => {
 
   const [currentLocationWeather, setCurrentLocationWeather] = useState(null);
   const [isLoading, setIsLoading] = useState(false);
-
+  
   useEffect(() => {
     setIsLoading(true);
-
+    
     const controller = new AbortController();
 
     if (navigator.geolocation) {
@@ -57,10 +57,7 @@ const Home = () => {
       setIsLoading(true);
 
       const response = await axios.get(
-        `https://api.openweathermap.org/data/2.5/weather?q=${cityNameRef.current.value}&appid=${API_KEY}&units=metric`,
-        {
-          signal: controller.signal,
-        }
+        `https://api.openweathermap.org/data/2.5/weather?q=${cityNameRef.current.value}&appid=${API_KEY}&units=metric`
       );
 
       console.log(response.data);
