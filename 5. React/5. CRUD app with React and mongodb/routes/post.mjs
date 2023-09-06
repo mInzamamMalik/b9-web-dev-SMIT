@@ -38,10 +38,10 @@ router.post('/post', async (req, res, next) => {
         });
         console.log("insertResponse: ", insertResponse);
 
-        res.send('post created');
+        res.send({ message: 'post created' });
     } catch (e) {
         console.log("error inserting mongodb: ", e);
-        res.status(500).send('server error, please try later');
+        res.status(500).send({ message: 'server error, please try later' });
     }
 })
 
@@ -141,7 +141,7 @@ router.put('/post/:postId', async (req, res, next) => {
     }
 })
 
-// DELETE  /api/v1/post/:userId/:postId
+// DELETE  /api/v1/post/:postId
 router.delete('/post/:postId', async (req, res, next) => {
 
     if (!ObjectId.isValid(req.params.postId)) {
