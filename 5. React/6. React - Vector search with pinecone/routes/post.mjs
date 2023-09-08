@@ -1,11 +1,18 @@
 
 import express from 'express';
-import { nanoid } from 'nanoid'
-import { client } from './../mongodb.mjs'
-import { ObjectId } from 'mongodb'
+import { customAlphabet } from 'nanoid'
+import { client } from './../mongodb.mjs';
+import { ObjectId } from 'mongodb';
+import pineconeClient, { openai as openaiClient }
+    from './../pinecone.mjs';
+
+const nanoid = customAlphabet('1234567890abcdefghijklmnopqrstuvwxyz', 10)
 
 const db = client.db("cruddb");
 const col = db.collection("posts");
+
+const pcIndex = pineconeClient.Index(process.env.PINECONE_INDEX_NAME);
+console.log("process.env.PINECONE_INDEX_NAME: ", process.env.PINECONE_INDEX_NAME);
 
 let router = express.Router()
 
@@ -30,13 +37,35 @@ router.post('/post', async (req, res, next) => {
     }
 
     try {
-        const insertResponse = await col.insertOne({
-            // _id: "7864972364724b4h2b4jhgh42",
-            title: req.body.title,
-            text: req.body.text,
-            createdOn: new Date()
+        // const insertResponse = await col.insertOne({
+        //     // _id: "7864972364724b4h2b4jhgh42",
+        //     title: req.body.title,
+        //     text: req.body.text,
+        //     createdOn: new Date()
+        // });
+        // console.log("insertResponse: ", insertResponse);
+
+        const response = await openaiClient.embeddings.create({
+            model: "text-embedding-ada-002",
+            input: `${req.body.title} ${req.body.text}`,
         });
-        console.log("insertResponse: ", insertResponse);
+        const vector = response?.data[0]?.embedding
+        console.log("vector: ", vector);
+
+
+
+
+        const upsertResponse = await pcIndex.upsert([{
+            id: nanoid(), // unique id, // unique id
+            values: vector
+            // metadata: {
+            //     title: req.body.title,
+            //     text: req.body.text,
+            //     createdOn: new Date().getTime()
+            // },
+        }]);
+        console.log("upsertResponse: ", upsertResponse);
+
 
         res.send({ message: 'post created' });
     } catch (e) {
