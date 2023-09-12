@@ -7,6 +7,8 @@ const baseUrl = "http://localhost:5001";
 const Home = () => {
   const postTitleInputRef = useRef(null);
   const postBodyInputRef = useRef(null);
+  const searchInputRef = useRef(null);
+
   const [isLoading, setIsLoading] = useState(false);
   const [alert, setAlert] = useState(null);
   const [editAlert, setEditAlert] = useState(null);
@@ -18,6 +20,21 @@ const Home = () => {
     try {
       setIsLoading(true);
       const response = await axios.get(`${baseUrl}/api/v1/posts`);
+      console.log(response.data);
+
+      setIsLoading(false);
+      setAllPosts([...response.data]);
+    } catch (error) {
+      console.log(error.data);
+      setIsLoading(false);
+    }
+  };
+
+  const searchHandler = async (e) => {
+    e.preventDefault();
+    try {
+      setIsLoading(true);
+      const response = await axios.get(`${baseUrl}/api/v1/search?q=${searchInputRef.current.value}`);
       console.log(response.data);
 
       setIsLoading(false);
@@ -50,6 +67,7 @@ const Home = () => {
       console.log(response.data);
       setAlert(response.data.message);
       setToggleRefresh(!toggleRefresh);
+      e.target.reset();
       // getAllPost();
     } catch (error) {
       // handle error
@@ -127,6 +145,11 @@ const Home = () => {
       </form>
 
       <br />
+
+      <form onSubmit={searchHandler} style={{ textAlign: "right" }}>
+        <input type="search" placeholder="Search..." ref={searchInputRef} />
+        <button type="submit" hidden></button>
+      </form>
 
       <div>
         {allPosts.map((post, index) => (
