@@ -11,11 +11,6 @@ import feedRouter from './routes/feed.mjs'
 import postRouter from './routes/post.mjs'
 
 
-
-
-
-
-
 const app = express();
 app.use(express.json()); // body parser
 app.use(cors())
