@@ -3,12 +3,63 @@ import express from 'express';
 import { nanoid } from 'nanoid'
 import { client } from './../mongodb.mjs'
 import { ObjectId } from 'mongodb'
+import OpenAI from "openai";
 
 const db = client.db("cruddb");
 const col = db.collection("posts");
 
 let router = express.Router()
 
+const openaiClient = new OpenAI({
+    apiKey: process.env.OPENAI_API_KEY,
+});
+
+
+
+
+router.get('/search', async (req, res, next) => {
+
+    try {
+        const response = await openaiClient.embeddings.create({
+            model: "text-embedding-ada-002",
+            input: req.query.q,
+        });
+        const vector = response?.data[0]?.embedding
+        console.log("vector: ", vector);
+        // [ 0.0023063174, -0.009358601, 0.01578391, ... , 0.01678391, ]
+
+        // Query for similar documents.
+        const documents = await col.aggregate([
+            {
+                "$search": {
+                    "index": "default",
+                    "knnBeta": {
+                        "vector": vector,
+                        "path": "plot_embedding",
+                        "k": 10 // number of documents
+                    }
+                }
+            },
+            {
+                "$project": {
+                    "plot_embedding": 0
+                }
+            }
+        ]).toArray();
+
+        documents.map(eachMatch => {
+            console.log(`score ${eachMatch?.score?.toFixed(3)} => ${JSON.stringify(eachMatch)}\n\n`);
+        })
+        console.log(`${documents.length} records found `);
+
+        res.send(documents);
+
+    } catch (e) {
+        console.log("error getting data mongodb: ", e);
+        res.status(500).send('server error, please try later');
+    }
+
+})
 
 
 // POST    /api/v1/post
@@ -61,7 +112,6 @@ router.get('/posts', async (req, res, next) => {
         res.status(500).send('server error, please try later');
     }
 })
-
 
 // [92133,92254, 92255 ]
 
