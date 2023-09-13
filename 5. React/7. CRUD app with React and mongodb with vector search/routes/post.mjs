@@ -37,12 +37,16 @@ router.get('/search', async (req, res, next) => {
                         "vector": vector,
                         "path": "plot_embedding",
                         "k": 10 // number of documents
-                    }
+                    },
+                    "scoreDetails": true
+
                 }
             },
             {
                 "$project": {
-                    "plot_embedding": 0
+                    "plot_embedding": 0,
+                    "score": { "$meta": "searchScore" },
+                    "scoreDetails": {"$meta": "searchScoreDetails"}
                 }
             }
         ]).toArray();
