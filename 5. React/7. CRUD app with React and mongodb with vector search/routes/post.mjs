@@ -46,7 +46,7 @@ router.get('/search', async (req, res, next) => {
                 "$project": {
                     "plot_embedding": 0,
                     "score": { "$meta": "searchScore" },
-                    "scoreDetails": {"$meta": "searchScoreDetails"}
+                    "scoreDetails": { "$meta": "searchScoreDetails" }
                 }
             }
         ]).toArray();
@@ -83,6 +83,8 @@ router.post('/post', async (req, res, next) => {
         } `);
         return;
     }
+
+    // create vector
 
     try {
         const insertResponse = await col.insertOne({

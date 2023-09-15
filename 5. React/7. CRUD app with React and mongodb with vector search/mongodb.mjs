@@ -1,6 +1,6 @@
 import { MongoClient } from 'mongodb'
 
-const uri = "mongodb+srv://dbuser:dbpassword@cluster0.9ha3mra.mongodb.net/?retryWrites=true&w=majority";
+const uri = "mongodb+srv://dbuser:dbpassword@cluster0.rmbc6xu.mongodb.net/?retryWrites=true&w=majority";
 export const client = new MongoClient(uri);
 
 async function run() {
