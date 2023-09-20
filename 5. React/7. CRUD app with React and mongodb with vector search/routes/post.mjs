@@ -17,6 +17,7 @@ const openaiClient = new OpenAI({
 
 
 
+// https://baseurl.com/search?q=car
 router.get('/search', async (req, res, next) => {
 
     try {
@@ -32,10 +33,10 @@ router.get('/search', async (req, res, next) => {
         const documents = await col.aggregate([
             {
                 "$search": {
-                    "index": "default",
+                    "index": "vectorIndex",
                     "knnBeta": {
                         "vector": vector,
-                        "path": "plot_embedding",
+                        "path": "embedding",
                         "k": 10 // number of documents
                     },
                     "scoreDetails": true
@@ -44,7 +45,7 @@ router.get('/search', async (req, res, next) => {
             },
             {
                 "$project": {
-                    "plot_embedding": 0,
+                    "embedding": 0,
                     "score": { "$meta": "searchScore" },
                     "scoreDetails": { "$meta": "searchScoreDetails" }
                 }
