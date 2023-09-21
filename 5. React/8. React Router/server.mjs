@@ -19,12 +19,27 @@ app.use(cors())
 app.use("/api/v1", authRouter)
 
 app.use((req, res, next) => { // JWT
-    let token = "valid"
-    if (token === "valid") {
+    console.log("cookies: ", req.cookies);
+
+    const token = req.cookies.token;
+    try {
+        const decoded = jwt.verify(token, process.env.SECRET);
+        console.log("decoded: ", decoded);
+
+        req.body.decoded = {
+            firstName: decoded.firstName,
+            lastName: decoded.lastName,
+            email: decoded.email,
+            isAdmin: decoded.isAdmin,
+        };
+
         next();
-    } else {
+
+    } catch (err) {
         res.status(401).send({ message: "invalid token" })
     }
+
+
 })
 
 app.use("/api/v1", postRouter) // Secure api
