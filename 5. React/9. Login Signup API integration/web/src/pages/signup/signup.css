@@ -1,0 +1,11 @@
+.errorMessage {
+    color: red;
+    font-size: 0.7rem;
+}
+.alertMessage {
+    font-size: 0.7rem;
+}
+
+.hidden {
+    display: none;
+}
