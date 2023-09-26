@@ -2,30 +2,36 @@ import { useState, useRef, useEffect } from "react";
 import axios from "axios";
 import "./login.css";
 
-
-const baseUrl = 'http://localhost:5001'
+const baseUrl = "http://localhost:5001";
 
 const Login = () => {
-
-
   const emailInputRef = useRef(null);
   const passwordInputRef = useRef(null);
 
   const [alertMessage, setAlertMessage] = useState("");
   const [errorMessage, setErrorMessage] = useState("");
 
+  useEffect(() => {
+    setTimeout(() => {
+      setAlertMessage("");
+      setErrorMessage("");
+    }, 5000);
+  }, [alertMessage, errorMessage]);
+
   const LoginSubmitHandler = async (e) => {
     e.preventDefault();
 
-
     try {
-      const response = await axios.post(`${baseUrl}/api/v1/login`, {
-        email: emailInputRef.current.value,
-        password: passwordInputRef.current.value,
-      },
-      {
-        withCredentials: true
-      });
+      const response = await axios.post(
+        `${baseUrl}/api/v1/login`,
+        {
+          email: emailInputRef.current.value,
+          password: passwordInputRef.current.value,
+        },
+        {
+          withCredentials: true,
+        }
+      );
 
       console.log("resp: ", response?.data?.message);
       setAlertMessage(response?.data?.message);

@@ -2,6 +2,8 @@ import express from 'express';
 import cors from 'cors';
 import path from 'path';
 const __dirname = path.resolve();
+import cookieParser from 'cookie-parser'
+
 
 import authRouter from './routes/auth.mjs'
 import commentRouter from './routes/comment.mjs'
@@ -13,6 +15,7 @@ import postRouter from './routes/post.mjs'
 
 const app = express();
 app.use(express.json()); // body parser
+app.use(cookieParser()); // cookie parser
 app.use(cors())
 
 // /api/v1/login

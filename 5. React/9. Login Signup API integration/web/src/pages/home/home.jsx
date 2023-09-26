@@ -8,7 +8,7 @@ const Home = () => {
   const postTitleInputRef = useRef(null);
   const postBodyInputRef = useRef(null);
   const searchInputRef = useRef(null);
-  
+
   const [isLoading, setIsLoading] = useState(false);
   const [alert, setAlert] = useState(null);
   const [editAlert, setEditAlert] = useState(null);
@@ -19,7 +19,9 @@ const Home = () => {
   const getAllPost = async () => {
     try {
       setIsLoading(true);
-      const response = await axios.get(`${baseUrl}/api/v1/posts`);
+      const response = await axios.get(`${baseUrl}/api/v1/posts`, {
+        withCredentials: true
+      });
       console.log(response.data);
 
       setIsLoading(false);
@@ -149,7 +151,6 @@ const Home = () => {
         <input type="search" placeholder="Search..." ref={searchInputRef} />
         <button type="submit" hidden></button>
       </form>
-
 
       <div>
         {allPosts.map((post, index) => (
