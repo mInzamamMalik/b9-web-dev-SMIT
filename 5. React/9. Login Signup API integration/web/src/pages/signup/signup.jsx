@@ -1,10 +1,15 @@
-import { useState, useRef, useEffect } from "react";
+import { useState, useRef, useEffect, useContext } from "react";
 import axios from "axios";
 import "./signup.css";
+
+import { GlobalContext } from "./../../context/context";
 
 const baseUrl = "http://localhost:5001";
 
 const Signup = () => {
+
+  const {state, dispatch} = useContext(GlobalContext);
+
   const firstNameInputRef = useRef(null);
   const lastNameInputRef = useRef(null);
   const emailInputRef = useRef(null);
@@ -52,6 +57,8 @@ const Signup = () => {
   return (
     <div>
       <h1> Signup Page </h1>
+      <h2>{state.name}</h2>
+
       <form id="signup" onSubmit={SignupSubmitHandler}>
         <label htmlFor="firstNameInput">First Name:</label>
         <input
