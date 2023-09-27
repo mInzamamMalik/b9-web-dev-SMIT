@@ -7,6 +7,8 @@ import OpenAI from "openai";
 
 const db = client.db("cruddb");
 const col = db.collection("posts");
+const userCollection = db.collection("users");
+
 
 let router = express.Router()
 
@@ -144,6 +146,25 @@ router.get('/post/:postId', async (req, res, next) => {
         let result = await col.findOne({ _id: new ObjectId(req.params.postId) });
         console.log("result: ", result); // [{...}] []
         res.send(result);
+    } catch (e) {
+        console.log("error getting data mongodb: ", e);
+        res.status(500).send('server error, please try later');
+    }
+})
+router.get('/profile', async (req, res, next) => {
+   
+    try {
+        let result = await userCollection.findOne({ email: req.body.decoded.email });
+        console.log("result: ", result); // [{...}] []
+        res.send({
+            message: 'profile fetched',
+            data:{
+                isAdmin: result.isAdmin,
+                firstName: result.firstName,
+                lastName: result.lastName,
+                email: result.email,
+            }
+        });
     } catch (e) {
         console.log("error getting data mongodb: ", e);
         res.status(500).send('server error, please try later');

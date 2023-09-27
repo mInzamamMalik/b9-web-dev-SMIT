@@ -43,9 +43,9 @@ router.post('/login', async (req, res, next) => {
             const isMatch = await varifyHash(req.body.password, result.password)
 
             if (isMatch) {
-                
+
                 const token = jwt.sign({
-                    isAdmin: false,
+                    isAdmin: result.isAdmin,
                     firstName: result.firstName,
                     lastName: result.lastName,
                     email: req.body.email,
@@ -60,7 +60,13 @@ router.post('/login', async (req, res, next) => {
                 });
 
                 res.send({
-                    message: "login successful"
+                    message: "login successful",
+                    data: {
+                        isAdmin: result.isAdmin,
+                        firstName: result.firstName,
+                        lastName: result.lastName,
+                        email: req.body.email,
+                    }
                 });
                 return;
             } else {
@@ -109,6 +115,7 @@ router.post('/signup', async (req, res, next) => {
             const passwordHash = await stringToHash(req.body.password);
 
             const insertResponse = await userCollection.insertOne({
+                isAdmin: false,
                 firstName: req.body.firstName,
                 lastName: req.body.lastName,
                 email: req.body.email,
