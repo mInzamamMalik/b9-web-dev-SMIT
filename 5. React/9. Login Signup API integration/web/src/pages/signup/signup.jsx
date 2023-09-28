@@ -4,7 +4,7 @@ import "./signup.css";
 
 import { GlobalContext } from "./../../context/context";
 
-const baseUrl = "http://localhost:5001";
+import { baseUrl } from "../../core";
 
 const Signup = () => {
 

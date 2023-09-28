@@ -2,7 +2,7 @@ import { useState, useRef, useEffect } from "react";
 import axios from "axios";
 import "./home.css";
 
-const baseUrl = "http://localhost:5001";
+import { baseUrl } from "../../core";
 
 const Home = () => {
   const postTitleInputRef = useRef(null);

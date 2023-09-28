@@ -12,8 +12,8 @@ import Signup from "./pages/signup/signup";
 import splashScreen from "./assets/splash.gif";
 
 import { GlobalContext } from "./context/context";
+import { baseUrl } from "./core";
 
-const baseUrl = "http://localhost:5001";
 
 const App = () => {
   const { state, dispatch } = useContext(GlobalContext);
