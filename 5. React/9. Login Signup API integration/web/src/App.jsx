@@ -39,10 +39,23 @@ const App = () => {
     checkLoginStatus();
   }, []);
 
+  const logoutHandler = async () => {
+    try {
+      await axios.post(`${baseUrl}/api/v1/logout`,{}, {
+        withCredentials: true,
+      });
+      dispatch({
+        type: "USER_LOGOUT"
+      });
+    } catch (err) {
+      console.log(err);
+    }
+  };
+
   return (
     <div>
       {/* admin routes */}
-      {state.isLogin === true && state.role === "admin"  ? (
+      {state.isLogin === true && state.role === "admin" ? (
         <>
           <nav>
             <ul>
@@ -56,6 +69,7 @@ const App = () => {
                 <Link to={`/about`}>Admin About</Link>
               </li>
               {state.user.email}
+              <button onClick={logoutHandler}>Logout</button>
             </ul>
           </nav>
 
@@ -84,6 +98,7 @@ const App = () => {
                 <Link to={`/about`}>About</Link>
               </li>
               {state.user.email}
+              <button onClick={logoutHandler}>Logout</button>
             </ul>
           </nav>
 
