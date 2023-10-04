@@ -71,7 +71,6 @@ router.get('/search', async (req, res, next) => {
 
 // POST    /api/v1/post
 router.post('/post', async (req, res, next) => {
-    console.log('this is signup!', new Date());
 
     if (
         !req.body.title
@@ -94,6 +93,8 @@ router.post('/post', async (req, res, next) => {
             // _id: "7864972364724b4h2b4jhgh42",
             title: req.body.title,
             text: req.body.text,
+            authorEmail: req.body.decoded.email,
+            authorId: new ObjectId(req.body.decoded._id),
             createdOn: new Date()
         });
         console.log("insertResponse: ", insertResponse);
@@ -106,9 +107,35 @@ router.post('/post', async (req, res, next) => {
 })
 
 
-router.get('/posts', async (req, res, next) => {
+
+router.get('/feed', async (req, res, next) => {
 
     const cursor = col.find({})
+        .sort({ _id: -1 })
+        .limit(100);
+
+    try {
+        let results = await cursor.toArray()
+        console.log("results: ", results);
+        res.send(results);
+    } catch (e) {
+        console.log("error getting data mongodb: ", e);
+        res.status(500).send('server error, please try later');
+    }
+
+})
+
+// /post?_id=
+router.get('/posts', async (req, res, next) => {
+
+    const userId = req.query._id || req.body.decoded._id
+
+    if (!ObjectId.isValid(userId)) {
+        res.status(403).send(`Invalid user id`);
+        return;
+    }
+
+    const cursor = col.find({ authorId: new ObjectId(userId) })
         .sort({ _id: -1 })
         .limit(100);
 
@@ -151,25 +178,36 @@ router.get('/post/:postId', async (req, res, next) => {
         res.status(500).send('server error, please try later');
     }
 })
-router.get('/profile', async (req, res, next) => {
-   
+
+const getProfileMiddleware = async (req, res, next) => {
+
+    const userId = req.params.userId || req.body.decoded._id;
+
+    if (!ObjectId.isValid(userId)) {
+        res.status(403).send(`Invalid user id`);
+        return;
+    }
+
     try {
-        let result = await userCollection.findOne({ email: req.body.decoded.email });
+        let result = await userCollection.findOne({ _id: new ObjectId(userId) });
         console.log("result: ", result); // [{...}] []
         res.send({
             message: 'profile fetched',
-            data:{
-                isAdmin: result.isAdmin,
-                firstName: result.firstName,
-                lastName: result.lastName,
-                email: result.email,
+            data: {
+                isAdmin: result?.isAdmin,
+                firstName: result?.firstName,
+                lastName: result?.lastName,
+                email: result?.email,
             }
         });
     } catch (e) {
         console.log("error getting data mongodb: ", e);
         res.status(500).send('server error, please try later');
     }
-})
+}
+router.get('/profile', getProfileMiddleware)
+router.get('/profile/:userId', getProfileMiddleware)
+
 
 // PUT     /api/v1/post/:postId
 // {

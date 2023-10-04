@@ -4,13 +4,13 @@ import path from 'path';
 const __dirname = path.resolve();
 import 'dotenv/config';
 import cookieParser from 'cookie-parser'
+import jwt from 'jsonwebtoken';
 
 
 import authRouter from './routes/auth.mjs'
+import postRouter from './routes/post.mjs'
 import commentRouter from './routes/comment.mjs'
 import feedRouter from './routes/feed.mjs'
-import postRouter from './routes/post.mjs'
-import jwt from 'jsonwebtoken';
 
 
 const app = express();
@@ -38,6 +38,7 @@ app.use("/api/v1", (req, res, next) => { // JWT
             lastName: decoded.lastName,
             email: decoded.email,
             isAdmin: decoded.isAdmin,
+            _id: decoded._id,
         };
 
         next();

@@ -14,9 +14,22 @@ import splashScreen from "./assets/splash.gif";
 import { GlobalContext } from "./context/context";
 import { baseUrl } from "./core";
 
-
 const App = () => {
   const { state, dispatch } = useContext(GlobalContext);
+
+  useEffect(() => {
+    axios.interceptors.request.use(
+      function (config) {
+        
+        config.withCredentials = true;
+        return config;
+      },
+      function (error) {
+        // Do something with request error
+        return Promise.reject(error);
+      }
+    );
+  }, []);
 
   useEffect(() => {
     const checkLoginStatus = async () => {
@@ -41,11 +54,15 @@ const App = () => {
 
   const logoutHandler = async () => {
     try {
-      await axios.post(`${baseUrl}/api/v1/logout`,{}, {
-        withCredentials: true,
-      });
+      await axios.post(
+        `${baseUrl}/api/v1/logout`,
+        {},
+        {
+          withCredentials: true,
+        }
+      );
       dispatch({
-        type: "USER_LOGOUT"
+        type: "USER_LOGOUT",
       });
     } catch (err) {
       console.log(err);
