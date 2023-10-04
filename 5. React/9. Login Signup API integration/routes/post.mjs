@@ -125,7 +125,7 @@ router.get('/feed', async (req, res, next) => {
 
 })
 
-// /post?_id=
+// /post?_id=23454354353453
 router.get('/posts', async (req, res, next) => {
 
     const userId = req.query._id || req.body.decoded._id
@@ -198,6 +198,7 @@ const getProfileMiddleware = async (req, res, next) => {
                 firstName: result?.firstName,
                 lastName: result?.lastName,
                 email: result?.email,
+                _id: result?._id
             }
         });
     } catch (e) {
@@ -206,7 +207,6 @@ const getProfileMiddleware = async (req, res, next) => {
     }
 }
 router.get('/profile', getProfileMiddleware)
-router.get('/profile/:userId', getProfileMiddleware)
 
 
 // PUT     /api/v1/post/:postId

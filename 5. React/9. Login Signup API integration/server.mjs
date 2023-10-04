@@ -6,11 +6,19 @@ import 'dotenv/config';
 import cookieParser from 'cookie-parser'
 import jwt from 'jsonwebtoken';
 
+import { client } from './mongodb.mjs'
+import { ObjectId } from 'mongodb'
+
+const db = client.db("cruddb");
+const col = db.collection("posts");
+const userCollection = db.collection("users");
+
 
 import authRouter from './routes/auth.mjs'
 import postRouter from './routes/post.mjs'
 import commentRouter from './routes/comment.mjs'
 import feedRouter from './routes/feed.mjs'
+import unAuthProfileRouter from './unAuthRoutes/profile.mjs'
 
 
 const app = express();
@@ -44,6 +52,9 @@ app.use("/api/v1", (req, res, next) => { // JWT
         next();
 
     } catch (err) {
+
+        // TODO: match all unauth routes
+        
         res.status(401).send({ message: "invalid token" })
     }
 

@@ -5,6 +5,7 @@ import axios from "axios";
 import { Routes, Route, Link, Navigate } from "react-router-dom";
 
 import Home from "./pages/home/home";
+import ProfilePage from "./pages/profile/profile";
 import About from "./pages/about/about";
 import Chat from "./pages/chat/chat";
 import Login from "./pages/login/login";
@@ -109,6 +110,9 @@ const App = () => {
                 <Link to={`/`}>Home</Link>
               </li>
               <li>
+                <Link to={`/profile/${state.user._id}`}>Profile</Link>
+              </li>
+              <li>
                 <Link to={`/chat`}>Chat</Link>
               </li>
               <li>
@@ -123,6 +127,7 @@ const App = () => {
             <Route path="/" element={<Home />} />
             <Route path="about" element={<About />} />
             <Route path="chat" element={<Chat />} />
+            <Route path="profile/:userId" element={<ProfilePage />} />
 
             <Route path="*" element={<Navigate to="/" replace={true} />} />
           </Routes>
@@ -146,6 +151,7 @@ const App = () => {
           <Routes>
             <Route path="login" element={<Login />} />
             <Route path="signup" element={<Signup />} />
+            <Route path="profile/:userId" element={<ProfilePage />} />
 
             <Route path="*" element={<Navigate to="/login" replace={true} />} />
           </Routes>

@@ -1,26 +1,32 @@
-import { useState, useRef, useEffect } from "react";
+import { useState, useRef, useEffect, useContext } from "react";
 import axios from "axios";
-import "./home.css";
+import "./profile.css";
+import { GlobalContext } from "../../context/context";
+import { useParams } from "react-router-dom";
 
 import { baseUrl } from "../../core";
 
-const Home = () => {
+const Profile = () => {
+  const { state, dispatch } = useContext(GlobalContext);
+
   const postTitleInputRef = useRef(null);
   const postBodyInputRef = useRef(null);
-  const searchInputRef = useRef(null);
 
   const [isLoading, setIsLoading] = useState(false);
   const [alert, setAlert] = useState(null);
   const [editAlert, setEditAlert] = useState(null);
+  const [profile, setProfile] = useState(null);
 
   const [allPosts, setAllPosts] = useState([]);
   const [toggleRefresh, setToggleRefresh] = useState(false);
 
+  const { userId } = useParams();
+
   const getAllPost = async () => {
     try {
       setIsLoading(true);
-      const response = await axios.get(`${baseUrl}/api/v1/feed`, {
-        withCredentials: true
+      const response = await axios.get(`${baseUrl}/api/v1/posts?_id=${userId || ""}`, {
+        withCredentials: true,
       });
       console.log(response.data);
 
@@ -32,8 +38,19 @@ const Home = () => {
     }
   };
 
+  const getProfile = async () => {
+    try {
+      const response = await axios.get(`${baseUrl}/api/v1/profile/${userId || ""}`);
+      console.log(response.data);
+      setProfile(response.data);
+    } catch (error) {
+      console.log(error.data);
+    }
+  };
+
   useEffect(() => {
     getAllPost();
+    getProfile();
 
     return () => {
       // cleanup function
@@ -105,53 +122,42 @@ const Home = () => {
     }
   };
 
-  const searchHandler = async (e) => {
-    e.preventDefault();
-    try {
-      setIsLoading(true);
-      const response = await axios.get(`${baseUrl}/api/v1/search?q=${searchInputRef.current.value}`);
-      console.log(response.data);
-
-      setIsLoading(false);
-      setAllPosts([...response.data]);
-    } catch (error) {
-      console.log(error.data);
-      setIsLoading(false);
-    }
-  };
-
   return (
     <div>
-      <form onSubmit={submitHandler}>
-        <label htmlFor="postTitleInput"> Post Title:</label>
-        <input id="postTitleInput" type="text" required minLength={2} maxLength={20} ref={postTitleInputRef} />
-        <br />
+      <div className="banner">
+        <img className="bannerImg" src="./" alt="" />
+        <img className="profileImg" src="./" alt="" />
+        <div className="profileName">
+          <h1>
+            {profile?.data?.firstName} {profile?.data?.lastName}
+          </h1>
+        </div>
+      </div>
 
-        <label htmlFor="postBodyInput"> Post Body:</label>
-        <textarea
-          id="postBodyInput"
-          type="text"
-          required
-          minLength={2}
-          maxLength={999}
-          ref={postBodyInputRef}
-        ></textarea>
-        <br />
+      {state.user._id === userId && (
+        <form onSubmit={submitHandler}>
+          <label htmlFor="postTitleInput"> Post Title:</label>
+          <input id="postTitleInput" type="text" required minLength={2} maxLength={20} ref={postTitleInputRef} />
+          <br />
 
-        <button type="submit">Publish Post</button>
-        <span>
-          {alert && alert}
-          {isLoading && "Loading..."}
-        </span>
-      </form>
+          <label htmlFor="postBodyInput"> Post Body:</label>
+          <textarea
+            id="postBodyInput"
+            type="text"
+            required
+            minLength={2}
+            maxLength={999}
+            ref={postBodyInputRef}
+          ></textarea>
+          <br />
 
-      <br />
-
-      <form onSubmit={searchHandler} style={{ textAlign: "right" }}>
-        <input type="search" placeholder="Search..." ref={searchInputRef} />
-        <button type="submit" hidden></button>
-      </form>
-
+          <button type="submit">Publish Post</button>
+          <span>
+            {alert && alert}
+            {isLoading && "Loading..."}
+          </span>
+        </form>
+      )}
       <div>
         {allPosts.map((post, index) => (
           <div key={post._id} className="post">
@@ -200,10 +206,12 @@ const Home = () => {
           </div>
         ))}
 
+        {allPosts.length === 0 && <div>No Data</div>}
+
         <br />
       </div>
     </div>
   );
 };
 
-export default Home;
+export default Profile;
