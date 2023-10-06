@@ -102,7 +102,7 @@ router.get('/profile/:userId', async (req, res, next) => {
 
     try {
         let result = await userCollection.findOne({ _id: new ObjectId(userId) });
-        console.log("result: ", result); // [{...}] []
+        console.log("result: ", result);
         res.send({
             message: 'profile fetched',
             data: {
@@ -118,7 +118,8 @@ router.get('/profile/:userId', async (req, res, next) => {
 })
 
 router.use((req, res) => {
-    res.status(401).send();
+    res.status(401).send({ message: "invalid token" })
+    return;
 })
 
 

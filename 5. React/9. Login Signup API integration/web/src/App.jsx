@@ -21,7 +21,6 @@ const App = () => {
   useEffect(() => {
     axios.interceptors.request.use(
       function (config) {
-        
         config.withCredentials = true;
         return config;
       },
@@ -75,8 +74,8 @@ const App = () => {
       {/* admin routes */}
       {state.isLogin === true && state.role === "admin" ? (
         <>
-          <nav>
-            <ul>
+          <nav className="navBar">
+            <ul className="left">
               <li>
                 <Link to={`/`}>Admin Home</Link>
               </li>
@@ -86,9 +85,11 @@ const App = () => {
               <li>
                 <Link to={`/about`}>Admin About</Link>
               </li>
+            </ul>
+            <div className="right">
               {state.user.email}
               <button onClick={logoutHandler}>Logout</button>
-            </ul>
+            </div>
           </nav>
 
           <Routes>
@@ -104,23 +105,31 @@ const App = () => {
       {/* user routes */}
       {state.isLogin === true && state.role === "user" ? (
         <>
-          <nav>
-            <ul>
+          <nav className="navBar">
+            <ul className="left">
               <li>
-                <Link to={`/`}>Home</Link>
+                <Link className="bg-indigo-500 rounded text-white py-1 px-6 mr-2" to={`/`}>Home</Link>
               </li>
               <li>
-                <Link to={`/profile/${state.user._id}`}>Profile</Link>
+                <Link className="bg-indigo-500 rounded text-white py-1 px-6 m-2" to={`/profile/${state.user._id}`}>Profile</Link>
               </li>
               <li>
-                <Link to={`/chat`}>Chat</Link>
+                <Link className="bg-indigo-500 rounded text-white py-1 px-6 m-2" to={`/chat`}>Chat</Link>
               </li>
               <li>
-                <Link to={`/about`}>About</Link>
+                <Link className="bg-indigo-500 rounded text-white py-1 px-6 m-2" to={`/about`}>About</Link>
               </li>
-              {state.user.email}
-              <button onClick={logoutHandler}>Logout</button>
             </ul>
+            <div className="right">
+              {state.user.email}
+              <button
+                type="button"
+                className="text-indigo-500 rounded bg-transparent py-1 px-6 m-2 border border-indigo-500"
+                onClick={logoutHandler}
+              >
+                Logout
+              </button>
+            </div>
           </nav>
 
           <Routes>

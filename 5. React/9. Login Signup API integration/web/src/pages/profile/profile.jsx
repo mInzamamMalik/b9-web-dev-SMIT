@@ -21,7 +21,7 @@ const Profile = () => {
   const [toggleRefresh, setToggleRefresh] = useState(false);
 
   const { userId } = useParams();
-
+ 
   const getAllPost = async () => {
     try {
       setIsLoading(true);
@@ -124,10 +124,11 @@ const Profile = () => {
 
   return (
     <div>
-      <div className="banner">
-        <img className="bannerImg" src="./" alt="" />
-        <img className="profileImg" src="./" alt="" />
-        <div className="profileName">
+      <div className="banner bg-indigo-200 h-[20rem] flex items-end flex-wrap">
+        {/* <img className="bannerImg" src="./" alt="" /> */}
+        {/* <img className="profileImg" src="./" alt="" /> */}
+        <div className="bg-red-500 border rounded-full w-[8rem] h-[8rem] m-5"></div>
+        <div className="profileName text-4xl mb-10">
           <h1>
             {profile?.data?.firstName} {profile?.data?.lastName}
           </h1>

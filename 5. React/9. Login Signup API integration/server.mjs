@@ -30,7 +30,6 @@ app.use(cors({
 }));
 
 
-// /api/v1/login
 app.use("/api/v1", authRouter)
 
 app.use("/api/v1", (req, res, next) => { // JWT
@@ -53,12 +52,9 @@ app.use("/api/v1", (req, res, next) => { // JWT
 
     } catch (err) {
 
-        // TODO: match all unauth routes
-        
-        res.status(401).send({ message: "invalid token" })
+        unAuthProfileRouter(req, res)
+        return;
     }
-
-
 })
 
 app.use("/api/v1", postRouter) // Secure api

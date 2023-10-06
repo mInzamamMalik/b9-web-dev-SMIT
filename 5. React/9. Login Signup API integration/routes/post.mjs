@@ -207,6 +207,7 @@ const getProfileMiddleware = async (req, res, next) => {
     }
 }
 router.get('/profile', getProfileMiddleware)
+router.get('/profile/:userId', getProfileMiddleware)
 
 
 // PUT     /api/v1/post/:postId
