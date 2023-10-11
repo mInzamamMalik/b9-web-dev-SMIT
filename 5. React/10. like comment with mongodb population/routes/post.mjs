@@ -110,9 +110,38 @@ router.post('/post', async (req, res, next) => {
 
 router.get('/feed', async (req, res, next) => {
 
-    const cursor = col.find({})
-        .sort({ _id: -1 })
-        .limit(100);
+    // const cursor = col.find({})
+    //     .sort({ _id: -1 })
+    //     .limit(100)
+    //     .project({ embedding: 0 })
+
+    const cursor = col.aggregate([
+        {
+            $lookup: {
+                from: "users", // users collection name
+                localField: 'text title createdOn authorId',
+                foreignField: 'firstName lastName Email',
+                as: 'authorObject'
+            },
+        },
+        {
+            $unwind: '$authorObject', // Since $lookup returns an array, unwind it to get a single object
+        },
+        {
+            $project: {
+                _id: 1,
+                text: 1,
+                title: 1,
+                createdOn: 1,
+                authorObject: {
+                   firstName: 1,
+                   lastName: 1,
+                   email: 1
+                } // Include the author object in the result
+            },
+        },
+    ])
+
 
     try {
         let results = await cursor.toArray()

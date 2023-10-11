@@ -120,6 +120,25 @@ const Home = () => {
     }
   };
 
+  const doLikeHandler = async (_id) => {
+    try {
+      setIsLoading(true);
+      const response = await axios.delete(`${baseUrl}/api/v1/post/${_id}`, {
+        title: postTitleInputRef.current.value,
+        text: postBodyInputRef.current.value,
+      });
+
+      setIsLoading(false);
+      console.log(response.data);
+      setAlert(response.data.message);
+      setToggleRefresh(!toggleRefresh);
+    } catch (error) {
+      // handle error
+      console.log(error?.data);
+      setIsLoading(false);
+    }
+  };
+
   return (
     <div>
       <form onSubmit={submitHandler}>
@@ -175,6 +194,7 @@ const Home = () => {
               </form>
             ) : (
               <div>
+                <h4>{post.authorEmail}</h4>
                 <h2>{post.title}</h2>
                 <p>{post.text}</p>
 
@@ -195,6 +215,24 @@ const Home = () => {
                 >
                   Delete
                 </button>
+
+                <button
+                  onClick={(e) => {
+                    doLikeHandler(post._id);
+                  }}
+                >
+                  Like
+                </button>
+
+                <button
+                  onClick={(e) => {
+                    deletePostHandler(post._id);
+                  }}
+                >
+                  Comment
+                </button>
+
+
               </div>
             )}
           </div>
