@@ -1,0 +1,24 @@
+{
+  "name": "4.-server",
+  "version": "1.0.0",
+  "description": "",
+  "main": "server.mjs",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node server.mjs",
+    "dev": "nodemon server.mjs"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "bcrypt-inzi": "^2.0.0",
+    "cookie-parser": "^1.4.6",
+    "cors": "^2.8.5",
+    "dotenv": "^16.3.1",
+    "express": "^4.18.2",
+    "jsonwebtoken": "^9.0.2",
+    "mongodb": "^5.7.0",
+    "nanoid": "^4.0.2",
+    "openai": "^4.6.0"
+  }
+}
