@@ -119,13 +119,16 @@ router.get('/feed', async (req, res, next) => {
         {
             $lookup: {
                 from: "users", // users collection name
-                localField: 'text title createdOn authorId',
-                foreignField: 'firstName lastName Email',
+                localField: 'authorId',
+                foreignField: '_id',
                 as: 'authorObject'
             },
         },
         {
-            $unwind: '$authorObject', // Since $lookup returns an array, unwind it to get a single object
+            $unwind: {
+                path: '$authorObject',
+                preserveNullAndEmptyArrays: true, // Include documents with null authorId
+            },
         },
         {
             $project: {
@@ -133,12 +136,19 @@ router.get('/feed', async (req, res, next) => {
                 text: 1,
                 title: 1,
                 createdOn: 1,
+                likes: { $ifNull: ['$likes', []] },
                 authorObject: {
-                   firstName: 1,
-                   lastName: 1,
-                   email: 1
-                } // Include the author object in the result
+                    firstName: '$authorObject.firstName',
+                    lastName: '$authorObject.lastName',
+                    email: '$authorObject.email'
+                }
             },
+        },
+        {
+            $skip: 0,
+        },
+        {
+            $limit: 100,
         },
     ])
 
@@ -301,6 +311,30 @@ router.delete('/post/:postId', async (req, res, next) => {
         res.send('post deleted');
     } catch (e) {
         console.log("error deleting mongodb: ", e);
+        res.status(500).send('server error, please try later');
+    }
+})
+
+router.post('/post/:postId/dolike', async (req, res, next) => {
+
+    if (!ObjectId.isValid(req.params.postId)) {
+        res.status(403).send(`Invalid post id`);
+        return;
+    }
+
+    try {
+        const doLikeResponse = await col.updateOne(
+            { _id: new ObjectId(req.params.postId) },
+            {
+                $addToSet: {
+                    likes: new ObjectId(req.body.decoded._id)
+                }
+            }
+        );
+        console.log("doLikeResponse: ", doLikeResponse);
+        res.send('like done');
+    } catch (e) {
+        console.log("error like post mongodb: ", e);
         res.status(500).send('server error, please try later');
     }
 })

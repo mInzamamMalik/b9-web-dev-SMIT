@@ -123,15 +123,12 @@ const Home = () => {
   const doLikeHandler = async (_id) => {
     try {
       setIsLoading(true);
-      const response = await axios.delete(`${baseUrl}/api/v1/post/${_id}`, {
-        title: postTitleInputRef.current.value,
-        text: postBodyInputRef.current.value,
-      });
+      const response = await axios.post(`${baseUrl}/api/v1/post/${_id}/dolike`);
 
       setIsLoading(false);
       console.log(response.data);
       setAlert(response.data.message);
-      setToggleRefresh(!toggleRefresh);
+      // setToggleRefresh(!toggleRefresh);
     } catch (error) {
       // handle error
       console.log(error?.data);
@@ -173,7 +170,7 @@ const Home = () => {
 
       <div>
         {allPosts.map((post, index) => (
-          <div key={post._id} className="post">
+          <div key={index} className="post">
             {post.isEdit ? (
               <form onSubmit={editSaveSubmitHandler} className="editForm">
                 <input type="text" disabled value={post._id} hidden />
@@ -194,8 +191,8 @@ const Home = () => {
               </form>
             ) : (
               <div>
-                <h4>{post.authorEmail}</h4>
                 <h2>{post.title}</h2>
+                <h4>{post.authorObject.firstName} {post.authorObject.lastName} - {post.authorObject.email}</h4>
                 <p>{post.text}</p>
 
                 <button
@@ -221,15 +218,7 @@ const Home = () => {
                     doLikeHandler(post._id);
                   }}
                 >
-                  Like
-                </button>
-
-                <button
-                  onClick={(e) => {
-                    deletePostHandler(post._id);
-                  }}
-                >
-                  Comment
+                  Like ({post?.likes?.length})
                 </button>
 
 
