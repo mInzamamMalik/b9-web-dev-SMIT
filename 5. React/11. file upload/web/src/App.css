@@ -1,0 +1,17 @@
+.navBar {
+    /* border: 2px solid red; */
+    display: flex;
+    justify-content: space-between;
+}
+
+.navBar .left,
+.navBar .right {
+    /* border: 2px solid gray; */
+}
+
+.navBar .right,
+.navBar .left {
+    padding: 0 1rem;
+    display: flex;
+    align-items: center;
+}
