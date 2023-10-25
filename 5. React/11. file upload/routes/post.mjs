@@ -4,10 +4,50 @@ import { nanoid } from 'nanoid'
 import { client } from './../mongodb.mjs'
 import { ObjectId } from 'mongodb'
 import OpenAI from "openai";
+import admin from "firebase-admin";
+import multer, { diskStorage } from 'multer';
+import fs from "fs";
 
 const db = client.db("cruddb");
 const col = db.collection("posts");
 const userCollection = db.collection("users");
+
+//==============================================
+const storageConfig = diskStorage({ // https://www.npmjs.com/package/multer#diskstorage
+    destination: './uploads/',
+    filename: function (req, file, cb) {
+        console.log("mul-file: ", file);
+        cb(null, `postImg-${new Date().getTime()}-${file.originalname}`)
+    }
+})
+let upload = multer({ storage: storageConfig })
+//==============================================
+
+
+
+// https://firebase.google.com/docs/storage/admin/start
+let serviceAccount = {
+    "type": "service_account",
+    "project_id": "smit-b9",
+    "private_key_id": "c3720670cec6ca23092087aa8991f3216dd37033",
+    "private_key": "-----BEGIN PRIVATE KEY-----\nMIIEvAIBADANBgkqhkiG9w0BAQEFAASCBKYwggSiAgEAAoIBAQDDBl9xHgdNiejU\n0RytstY2kLHgG81pcQ6TQ5oYAvrjtQtcNhvLCjAi5mevTzhiPkbeomE9aGEkcu/y\nmemNNA5MM5DsHwCK6Z4DdX+QtnjMCF4pk4Vx4opND5GWG2BLTJ+T/gAYqaupGFqG\nQB8bGKIu3kkiUGzmztEPC+gSkdt5y7W+8WXLyY7mCTGfMFnbd7B9PXQMeQmrSek+\nobbW00n6NlKQLJi9OJov8L7HeK3FTFccSnW3vXLlG11jJw8E/mbHFAiI1q/i/RQ6\nwuUSn2qZUnE1pohSlJnHvyESvCaUaw1Qcu/cA/eBrnN14rKPiuUpGFJ0lIOXwwLy\nDwYnjWbXAgMBAAECggEAVHD18ixmTRRhU4QXPr4oMggEfFyNXBIvlWO33J2ts9o3\nyP1Em20V2oaYbjeG2kLMvKjiIYyIQxfg/NHXZeQcLLJHFXV27q6oVCcTzLy1IOKe\norHVHbJQ33zWNIA1+WR708Aumn8cbGK3D1nEHh9UWaa1U74u6OCzdChbm2678MeZ\nGCLBf8wA/6sWcJXq9hfaoj2CWcR3mb4TOMVXbnpeiuJvSZxpcq5RdQxkv/hvbF98\nT3mW9c5fIcZm2Bc8k/OnC33nQ498sO7bgATDUmJj2gOGMf+4rj7HSb+nmRcqyfYY\nG316KIkATwMTBg3otW/Dlinq3qO02YO28reOc6lWgQKBgQDx2jS91K/5mPRcFHwZ\n82GSclhY3IbFkNDQU+NF3036U8oU1vomxuwSka9bJZWM+lvCwlBXsvR818x22/3m\nhAHjpjjgcA1PpGeaw9gxYIzlcjVj4IZuM6WbTlL39W8ciR1dNirDH8Uk5JBWYHoi\nPv9RXTzmDj1gszoCAozJWrSJyQKBgQDObuou1bS/2bYD2BttDRYJ4yA/R9i0RwZw\n1bx9oo5cFrdas2PIy5MBj7IbtUFR+Memnuv8PzKULuQmak8B3LePMGakukAZcDUV\nJzwVbSrJUTJE7bgl1NDrfOV47oslUMx6dp0k9WDhjbbQkcFZN0e5j9TGLcThh0gd\nh88FDZa7nwKBgGWGOvOhL8nwKkvpEXt3TnNCatHKqQyQUQfS3yn6pmo5+C+tWs8i\nXAEjhOAXM+M9SX3FQiK+baFmmV8f1EKLEZv1sBSPFRdkpVUzdzKrHBpJSh5GJ0hl\nh9RdGbkbH2x0Jo51aZgFYyWsiOapkzuDBHysTh8oxR0tv2EOnvj7iaP5AoGAWenD\nhIy+goWQGtKI95GolLvhss5XXAZHjuP5intAKGoYiJ/0CWRp7lcpS5pCDjMeursj\nrCXWoOZfpz/Mk9IP/YUmX/9jpfDSnhkNuYNoDHGaRJ2KBKhSKw+mX2r/Hky4E2sQ\nfSWHghaYlvW1UmeajP9RvNP4mgazaXFawSevDJ8CgYAAzWzp88KLWw3buujKsFJQ\nGcR7iwHosjd79ZlrtmwXGAqHrpHbxs4jvafqRJrIwYRbd1cW4u98HXZS9W4oXsR3\nD4VQ4uiduebFHluNPCBcB8zRQku5mHBV616vzRbFLSiZ/LJ7HBFznYPeTK7qzsn2\nn+cBOJ118AP7xFDX2sSwBQ==\n-----END PRIVATE KEY-----\n",
+    "client_email": "firebase-adminsdk-exepd@smit-b9.iam.gserviceaccount.com",
+    "client_id": "104671436353117487920",
+    "auth_uri": "https://accounts.google.com/o/oauth2/auth",
+    "token_uri": "https://oauth2.googleapis.com/token",
+    "auth_provider_x509_cert_url": "https://www.googleapis.com/oauth2/v1/certs",
+    "client_x509_cert_url": "https://www.googleapis.com/robot/v1/metadata/x509/firebase-adminsdk-exepd%40smit-b9.iam.gserviceaccount.com",
+    "universe_domain": "googleapis.com"
+};
+admin.initializeApp({
+    credential: admin.credential.cert(serviceAccount),
+    // databaseURL: "https://smit-b9.firebaseio.com"
+});
+const bucket = admin.storage().bucket("gs://smit-b9.appspot.com");
+
+//==============================================
+
+
 
 
 let router = express.Router()
@@ -70,41 +110,102 @@ router.get('/search', async (req, res, next) => {
 
 
 // POST    /api/v1/post
-router.post('/post', async (req, res, next) => {
+router.post('/post',
+    (req, res, next) => {
+        req.decoded = { ...req.body.decoded }
+        next();
+    },
+    upload.any(),
 
-    if (
-        !req.body.title
-        || !req.body.text
-    ) {
-        res.status(403);
-        res.send(`required parameters missing, 
+    async (req, res, next) => {
+        console.log("req.body: ", req.body);
+
+        if (
+            !req.body.title
+            || !req.body.text
+        ) {
+            res.status(403);
+            res.send(`required parameters missing, 
         example request body:
         {
             title: "abc post title",
             text: "some post text"
         } `);
-        return;
-    }
+            return;
+        }
 
-    // create vector
 
-    try {
-        const insertResponse = await col.insertOne({
-            // _id: "7864972364724b4h2b4jhgh42",
-            title: req.body.title,
-            text: req.body.text,
-            authorEmail: req.body.decoded.email,
-            authorId: new ObjectId(req.body.decoded._id),
-            createdOn: new Date()
-        });
-        console.log("insertResponse: ", insertResponse);
+        // TODO: save file in storage bucket and get public url
 
-        res.send({ message: 'post created' });
-    } catch (e) {
-        console.log("error inserting mongodb: ", e);
-        res.status(500).send({ message: 'server error, please try later' });
-    }
-})
+        console.log("req.files: ", req.files);
+
+        if (req.files[0].size > 2000000) { // size bytes, limit of 2MB
+            res.status(403).send({ message: 'File size limit exceed, max limit 2MB' });
+            return;
+        }
+
+        bucket.upload(
+            req.files[0].path,
+            {
+                destination: `profile/${req.files[0].filename}`, // give destination name if you want to give a certain name to file in bucket, include date to make name unique otherwise it will replace previous file with the same name
+            },
+            function (err, file, apiResponse) {
+                if (!err) {
+                    // console.log("api resp: ", apiResponse);
+
+                    // https://googleapis.dev/nodejs/storage/latest/Bucket.html#getSignedUrl
+                    file.getSignedUrl({
+                        action: 'read',
+                        expires: '03-09-2491'
+                    }).then(async (urlData, err) => {
+                        if (!err) {
+                            console.log("public downloadable url: ", urlData[0]) // this is public downloadable url 
+
+
+                            try {
+                                const insertResponse = await col.insertOne({
+                                    // _id: "7864972364724b4h2b4jhgh42",
+                                    title: req.body.title,
+                                    text: req.body.text,
+                                    img: urlData[0],
+                                    authorEmail: req.decoded.email,
+                                    authorId: new ObjectId(req.decoded._id),
+                                    createdOn: new Date()
+                                });
+                                console.log("insertResponse: ", insertResponse);
+
+                                res.send({ message: 'post created' });
+                            } catch (e) {
+                                console.log("error inserting mongodb: ", e);
+                                res.status(500).send({ message: 'server error, please try later' });
+                            }
+
+
+
+                            // // delete file from folder before sending response back to client (optional but recommended)
+                            // // optional because it is gonna delete automatically sooner or later
+                            // // recommended because you may run out of space if you dont do so, and if your files are sensitive it is simply not safe in server folder
+
+                            try {
+                                fs.unlinkSync(req.files[0].path)
+                                //file removed
+                            } catch (err) {
+                                console.error(err)
+                            }
+                        }
+                    })
+                } else {
+                    console.log("err: ", err)
+                    res.status(500).send({
+                        message: "server error"
+                    });
+                }
+            });
+
+
+
+
+    })
 
 
 
@@ -135,6 +236,7 @@ router.get('/feed', async (req, res, next) => {
                 _id: 1,
                 text: 1,
                 title: 1,
+                img: 1,
                 createdOn: 1,
                 likes: { $ifNull: ['$likes', []] },
                 authorObject: {
@@ -145,17 +247,21 @@ router.get('/feed', async (req, res, next) => {
             },
         },
         {
-            $skip: 0,
+            $sort: { _id: -1 }
+        },
+        {
+            $skip: 0
         },
         {
             $limit: 100,
-        },
+        }
+
     ])
 
 
     try {
         let results = await cursor.toArray()
-        console.log("results: ", results);
+        // console.log("results: ", results);
         res.send(results);
     } catch (e) {
         console.log("error getting data mongodb: ", e);

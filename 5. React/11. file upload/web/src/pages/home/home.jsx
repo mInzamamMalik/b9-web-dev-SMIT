@@ -7,6 +7,7 @@ import { baseUrl } from "../../core";
 const Home = () => {
   const postTitleInputRef = useRef(null);
   const postBodyInputRef = useRef(null);
+  const postFileInputRef = useRef(null);
   const searchInputRef = useRef(null);
 
   const [isLoading, setIsLoading] = useState(false);
@@ -15,6 +16,8 @@ const Home = () => {
 
   const [allPosts, setAllPosts] = useState([]);
   const [toggleRefresh, setToggleRefresh] = useState(false);
+
+  const [selectedImage, setSelectedImage] = useState("");
 
   const getAllPost = async () => {
     try {
@@ -45,16 +48,32 @@ const Home = () => {
 
     try {
       setIsLoading(true);
-      const response = await axios.post(`${baseUrl}/api/v1/post`, {
-        title: postTitleInputRef.current.value,
-        text: postBodyInputRef.current.value,
-      });
+
+      // const response = await axios.post(`${baseUrl}/api/v1/post`, {
+      //   title: postTitleInputRef.current.value,
+      //   text: postBodyInputRef.current.value,
+      // });
+
+      let formData = new FormData();
+
+      formData.append("title", postTitleInputRef.current.value);
+      formData.append("text", postBodyInputRef.current.value);
+      formData.append("image", postFileInputRef.current.files[0]);
+
+      const response = await axios.post(
+        `${baseUrl}/api/v1/post`,
+        formData,
+        {
+          headers: { 'Content-Type': 'multipart/form-data' }
+        })
 
       setIsLoading(false);
       console.log(response.data);
       setAlert(response.data.message);
       setToggleRefresh(!toggleRefresh);
       // getAllPost();
+      setSelectedImage("");
+      e.target.reset();
     } catch (error) {
       // handle error
       console.log(error?.data);
@@ -123,7 +142,7 @@ const Home = () => {
   const doLikeHandler = async (_id) => {
     try {
       setIsLoading(true);
-      const response = await axios.post(`${baseUrl}/api/v1/post/${_id}/dolike`);
+      const response = await axios.post(`${baseUrl} / api / v1 / post / ${_id} / dolike`);
 
       setIsLoading(false);
       console.log(response.data);
@@ -152,6 +171,19 @@ const Home = () => {
           maxLength={999}
           ref={postBodyInputRef}
         ></textarea>
+        <br />
+
+        <label htmlFor="postFileInput"> Photo:</label>
+        <input ref={postFileInputRef} id="postFileInput" type="file" name="postFileInput"
+          accept="image/*" onChange={(e) => {
+            const base64Url = URL.createObjectURL(e.target.files[0]);
+            setSelectedImage(base64Url)
+          }} />
+
+        <br />
+
+        {selectedImage && <img width={400} src={selectedImage} alt="selected image" />}
+
         <br />
 
         <button type="submit">Publish Post</button>
@@ -194,6 +226,13 @@ const Home = () => {
                 <h2>{post.title}</h2>
                 <h4>{post.authorObject.firstName} {post.authorObject.lastName} - {post.authorObject.email}</h4>
                 <p>{post.text}</p>
+
+                {post.img &&
+                  <>
+                    <img width={300} src={post.img} alt="post image" />
+                    <br />
+                  </>
+                }
 
                 <button
                   onClick={(e) => {
