@@ -157,40 +157,60 @@ const Home = () => {
 
   return (
     <div>
-      <form onSubmit={submitHandler}>
-        <label htmlFor="postTitleInput"> Post Title:</label>
-        <input id="postTitleInput" type="text" required minLength={2} maxLength={20} ref={postTitleInputRef} />
-        <br />
+      <form onSubmit={submitHandler} className="postForm">
 
-        <label htmlFor="postBodyInput"> Post Body:</label>
-        <textarea
-          id="postBodyInput"
-          type="text"
-          required
-          minLength={2}
-          maxLength={999}
-          ref={postBodyInputRef}
-        ></textarea>
-        <br />
+        <div className="left">
 
-        <label htmlFor="postFileInput"> Photo:</label>
-        <input ref={postFileInputRef} id="postFileInput" type="file" name="postFileInput"
-          accept="image/*" onChange={(e) => {
-            const base64Url = URL.createObjectURL(e.target.files[0]);
-            setSelectedImage(base64Url)
-          }} />
 
-        <br />
+          <div className="section1">
+            <div className="labels">
+              <label htmlFor="postTitleInput"> Post Title:</label>
+              <br />
+              <label htmlFor="postBodyInput"> Post Body:</label>
+              <br />
+              <label htmlFor="postFileInput"> Photo:</label>
+            </div>
 
-        {selectedImage && <img width={400} src={selectedImage} alt="selected image" />}
+            <div className="inputs">
+              <input id="postTitleInput" type="text" required minLength={2} maxLength={20} ref={postTitleInputRef} />
+              <br />
+              <textarea
+                id="postBodyInput"
+                type="text"
+                required
+                minLength={2}
+                maxLength={999}
+                ref={postBodyInputRef}
+              ></textarea>
+              <br />
+              <input ref={postFileInputRef} id="postFileInput" type="file" name="postFileInput"
+                accept="image/*" onChange={(e) => {
+                  const base64Url = URL.createObjectURL(e.target.files[0]);
+                  setSelectedImage(base64Url)
+                }} />
 
-        <br />
 
-        <button type="submit">Publish Post</button>
-        <span>
-          {alert && alert}
-          {isLoading && "Loading..."}
-        </span>
+            </div>
+
+
+          </div>
+
+
+          <br />
+          <button type="submit">Publish Post</button>
+
+          <span>
+            {alert && alert}
+            {isLoading && "Loading..."}
+          </span>
+        </div>
+
+
+        <div className="right">
+          {selectedImage && <img height={220} src={selectedImage} alt="selected image" />}
+
+        </div>
+
       </form>
 
       <br />

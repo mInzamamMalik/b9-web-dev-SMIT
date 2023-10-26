@@ -121,11 +121,13 @@ const App = () => {
               </li>
             </ul>
             <div className="right">
-              {state.user.email}
+
+              <div className="loginName">
+                {state.user.email}
+              </div>
               <button
                 type="button"
-                className="text-indigo-500 rounded bg-transparent py-1 px-6 m-2 border border-indigo-500"
-                onClick={logoutHandler}
+                className="logoutButton" onClick={logoutHandler}
               >
                 Logout
               </button>
@@ -146,8 +148,11 @@ const App = () => {
       {/* unAuth routes */}
       {state.isLogin === false ? (
         <>
-          <nav>
-            <ul>
+          <nav className="navBar">
+            <ul className="left">
+
+            </ul>
+            <ul className="right">
               <li>
                 <Link to={`/login`}>Login</Link>
               </li>

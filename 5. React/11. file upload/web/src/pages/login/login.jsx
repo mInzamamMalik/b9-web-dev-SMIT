@@ -53,7 +53,6 @@ const Login = () => {
   return (
     <div>
       <h1>Login</h1>
-      <div>{JSON.stringify(state)}</div>
 
       <form id="loginForm" onSubmit={LoginSubmitHandler}>
         <label htmlFor="emailInput">Email:</label>
