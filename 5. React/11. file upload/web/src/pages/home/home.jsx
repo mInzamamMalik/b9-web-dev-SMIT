@@ -142,7 +142,7 @@ const Home = () => {
   const doLikeHandler = async (_id) => {
     try {
       setIsLoading(true);
-      const response = await axios.post(`${baseUrl} / api / v1 / post / ${_id} / dolike`);
+      const response = await axios.post(`${baseUrl}/api/v1/post/${_id}/dolike`);
 
       setIsLoading(false);
       console.log(response.data);
