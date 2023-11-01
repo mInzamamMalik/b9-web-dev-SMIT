@@ -1,0 +1,46 @@
+.navBar {
+    /* border: 2px solid red; */
+    display: flex;
+    justify-content: space-between;
+}
+
+.navBar li {
+    list-style-type: none;
+    border: 1px solid gray;
+    border-radius: 5px;
+    padding: 0.3rem 1rem;
+    margin: 0 0.3rem;
+}
+
+.navBar li a {
+    text-decoration: none;
+    color: black;
+}
+
+.navBar .right .loginName,
+.navBar .right .logoutButton {
+    border-radius: 5px;
+    padding: 0.3rem 1rem;
+    margin: 0 0.3rem;
+    font-size: 1rem;
+}
+
+.navBar .right .logoutButton {
+    background-color: #a0a3ad;
+    color: black;
+    border: 1px solid black;
+}
+
+.navBar .right .loginName {
+    text-transform: lowercase;
+    border: rgb(232, 232, 232);
+    background-color: rgb(232, 232, 232);
+    color: black
+}
+
+.navBar .right,
+.navBar .left {
+    padding: 0 1rem;
+    display: flex;
+    align-items: center;
+}

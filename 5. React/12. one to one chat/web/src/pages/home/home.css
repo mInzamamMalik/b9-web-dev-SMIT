@@ -1,0 +1,10 @@
+.postForm {
+    padding: 1rem;
+    display: flex;
+    justify-content: flex-start;
+    min-height: 240px;
+}
+
+.postForm .section1 {
+    display: flex;
+}
