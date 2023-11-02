@@ -1,16 +1,80 @@
-import { useRef } from "react"
 import img1 from "./../../assets/img1.jpg"
 import img2 from "./../../assets/img2.jpeg"
+import { useParams } from "react-router-dom"
+import { useState, useRef, useEffect, useContext } from "react";
+import axios from "axios";
+import { baseUrl } from "../../core";
+import { GlobalContext } from "../../context/context";
 
 import './chat.css'
 const Chat = () => {
+    let { state, dispatch } = useContext(GlobalContext);
 
+
+    console.log("state: ", state);
+
+    const params = useParams();
     const messageText = useRef("")
+    const [isLoading, setIsLoading] = useState(false);
+    const [chat, setChat] = useState([]);
+    const [toggleRefresh, setToggleRefresh] = useState(false);
 
 
-    const sendMessageHandler = (event) => {
+    console.log("params: ", params);
+
+    const getChat = async () => {
+        try {
+            setIsLoading(true);
+            const response = await axios.get(`${baseUrl}/api/v1/messages/${params.userId}`);
+            console.log(response.data);
+
+            setIsLoading(false);
+            setChat([...response.data]);
+        } catch (error) {
+            console.log(error.data);
+            setIsLoading(false);
+        }
+    };
+
+    useEffect(() => {
+        getChat();
+
+        return () => {
+
+        };
+    }, [toggleRefresh]);
+
+
+    const sendMessageHandler = async (event) => {
         event.preventDefault();
         console.log(messageText.current.value);
+
+        try {
+            setIsLoading(true);
+
+            let formData = new FormData();
+
+            formData.append("to_id", params.userId);
+            formData.append("messageText", messageText.current.value);
+            // formData.append("image", aaa.current.files[0]);
+
+            const response = await axios.post(
+                `${baseUrl}/api/v1/message`,
+                formData,
+                {
+                    headers: { 'Content-Type': 'multipart/form-data' }
+                })
+
+            setIsLoading(false);
+            setToggleRefresh(!toggleRefresh)
+            console.log(response.data);
+            event.target.reset();
+        } catch (error) {
+            // handle error
+            console.log(error?.data);
+            setIsLoading(false);
+        }
+
 
     }
 
@@ -22,195 +86,13 @@ const Chat = () => {
 
             <div id="chatWindow">
 
-                <div className="chatBaloon my">
-                    <img width={300} src={img1} alt="" />
-                    Hi How are you doing? 200
+                {chat.map((eachMessage, index) => (
 
-                </div>
-                <div className="chatBaloon your">
-                    <img width={300} src={img2} alt="" />
-                    Hi 👋 I am good how are you? 199
-                </div>
-                <div className="chatBaloon my">
-                    Hi How are you doing? 198
-                </div>
-                <div className="chatBaloon your">
-                    Hi 👋 I am good how are you? 197
-                </div>
-                <div className="chatBaloon my">
-                    Hi How are you doing?
-                </div>
-                <div className="chatBaloon your">
-                    Hi 👋 I am good how are you?
-                </div>
-                <div className="chatBaloon my">
-                    Hi How are you doing?
-                </div>
-                <div className="chatBaloon your">
-                    Hi 👋 I am good how are you?
-                </div>
-                <div className="chatBaloon my">
-                    Hi How are you doing?
-                </div>
-                <div className="chatBaloon your">
-                    Hi 👋 I am good how are you?
-                </div>
-                <div className="chatBaloon my">
-                    Hi How are you doing?
-                </div>
-                <div className="chatBaloon your">
-                    Hi 👋 I am good how are you?
-                </div>
-                <div className="chatBaloon my">
-                    Hi How are you doing?
-                </div>
-                <div className="chatBaloon your">
-                    Hi 👋 I am good how are you?
-                </div>
-                <div className="chatBaloon my">
-                    Hi How are you doing?
-                </div>
-                <div className="chatBaloon your">
-                    Hi 👋 I am good how are you?
-                </div>
-                <div className="chatBaloon my">
-                    Hi How are you doing?
-                </div>
-                <div className="chatBaloon your">
-                    Hi 👋 I am good how are you?
-                </div>
-                <div className="chatBaloon my">
-                    Hi How are you doing?
-                </div>
-                <div className="chatBaloon your">
-                    Hi 👋 I am good how are you?
-                </div>
-                <div className="chatBaloon my">
-                    Hi How are you doing?
-                </div>
-                <div className="chatBaloon your">
-                    Hi 👋 I am good how are you?
-                </div>
-                <div className="chatBaloon my">
-                    Hi How are you doing?
-                </div>
-                <div className="chatBaloon your">
-                    Hi 👋 I am good how are you?
-                </div>
-                <div className="chatBaloon my">
-                    Hi How are you doing?
-                </div>
-                <div className="chatBaloon your">
-                    Hi 👋 I am good how are you?
-                </div>
-                <div className="chatBaloon my">
-                    Hi How are you doing?
-                </div>
-                <div className="chatBaloon your">
-                    Hi 👋 I am good how are you?
-                </div>
-                <div className="chatBaloon my">
-                    Hi How are you doing?
-                </div>
-                <div className="chatBaloon your">
-                    Hi 👋 I am good how are you?
-                </div>
-                <div className="chatBaloon my">
-                    Hi How are you doing?
-                </div>
-                <div className="chatBaloon your">
-                    Hi 👋 I am good how are you?
-                </div>
-                <div className="chatBaloon my">
-                    Hi How are you doing?
-                </div>
-                <div className="chatBaloon your">
-                    Hi 👋 I am good how are you?
-                </div>
-                <div className="chatBaloon my">
-                    Hi How are you doing?
-                </div>
-                <div className="chatBaloon your">
-                    Hi 👋 I am good how are you?
-                </div>
-                <div className="chatBaloon my">
-                    Hi How are you doing?
-                </div>
-                <div className="chatBaloon your">
-                    Hi 👋 I am good how are you?
-                </div>
-                <div className="chatBaloon my">
-                    Hi How are you doing?
-                </div>
-                <div className="chatBaloon your">
-                    Hi 👋 I am good how are you?
-                </div>
-                <div className="chatBaloon my">
-                    Hi How are you doing?
-                </div>
-                <div className="chatBaloon your">
-                    Hi 👋 I am good how are you?
-                </div>
-                <div className="chatBaloon my">
-                    Hi How are you doing?
-                </div>
-                <div className="chatBaloon your">
-                    Hi 👋 I am good how are you?
-                </div>
-                <div className="chatBaloon my">
-                    Hi How are you doing?
-                </div>
-                <div className="chatBaloon your">
-                    Hi 👋 I am good how are you?
-                </div>
-                <div className="chatBaloon my">
-                    Hi How are you doing?
-                </div>
-                <div className="chatBaloon your">
-                    Hi 👋 I am good how are you?
-                </div>
-                <div className="chatBaloon my">
-                    Hi How are you doing?
-                </div>
-                <div className="chatBaloon your">
-                    Hi 👋 I am good how are you?
-                </div>
-                <div className="chatBaloon my">
-                    Hi How are you doing?
-                </div>
-                <div className="chatBaloon your">
-                    Hi 👋 I am good how are you?
-                </div>
-                <div className="chatBaloon my">
-                    Hi How are you doing?
-                </div>
-                <div className="chatBaloon your">
-                    Hi 👋 I am good how are you?
-                </div>
-                <div className="chatBaloon my">
-                    Hi How are you doing?
-                </div>
-                <div className="chatBaloon your">
-                    Hi 👋 I am good how are you?
-                </div>
-                <div className="chatBaloon my">
-                    Hi How are you doing?
-                </div>
-                <div className="chatBaloon your">
-                    Hi 👋 I am good how are you? 4
-                </div>
-                <div className="chatBaloon my">
-                    Hi How are you doing? 3
-                </div>
-                <div className="chatBaloon your">
-                    Hi How are you doing? 1Hi How are you doing? 1Hi How are you doing? 1Hi How are you doing? 1Hi How are you doing? 1Hi How are you doing? 1Hi How are you doing? 1Hi How are you doing? 1Hi How are you doing? 1Hi How are you doing? 1Hi How are you doing? 1Hi How are you doing? 1Hi How are you doing? 1Hi How are you doing? 1Hi How are you doing? 1Hi How are you doing? 1Hi How are you doing? 1Hi How are you doing? 2
-                </div>
-                <div className="chatBaloon my">
-                    Hi How are you doing? 1Hi How are you doing? 1Hi How are you doing? 1Hi How are you doing? 1Hi How are you doing? 1Hi How are you doing? 1Hi How are you doing? 1Hi How are you doing? 1Hi How are you doing? 1Hi How are you doing? 1Hi How are you doing? 1Hi How are you doing? 1Hi How are you doing? 1Hi How are you doing? 1Hi How are you doing? 1Hi How are you doing? 1Hi How are you doing? 1Hi How are you doing? 1
-                </div>
-
-
-
+                    <div className={`chatBaloon ${(eachMessage.from_id === state.user._id) ? "my" : "your"}`}>
+                        {eachMessage.messageText}
+                    </div>
+                ))}
+                
             </div>
 
             <form id="writeMessageForm" onSubmit={sendMessageHandler}>

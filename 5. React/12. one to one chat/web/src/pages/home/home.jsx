@@ -1,10 +1,14 @@
 import { useState, useRef, useEffect } from "react";
 import axios from "axios";
 import "./home.css";
+import { Navigate, useNavigate } from "react-router-dom";
 
 import { baseUrl } from "../../core";
 
 const Home = () => {
+
+  const navigate = useNavigate();
+
   const postTitleInputRef = useRef(null);
   const postBodyInputRef = useRef(null);
   const postFileInputRef = useRef(null);
@@ -279,6 +283,16 @@ const Home = () => {
                 >
                   Like ({post?.likes?.length})
                 </button>
+
+                <button
+                  onClick={(e) => {
+                    navigate(`/chat/${post?.authorObject?._id}`)
+                  }}
+                >
+                  Message
+                </button>
+
+
 
 
               </div>

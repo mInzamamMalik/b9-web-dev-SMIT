@@ -242,7 +242,8 @@ router.get('/feed', async (req, res, next) => {
                 authorObject: {
                     firstName: '$authorObject.firstName',
                     lastName: '$authorObject.lastName',
-                    email: '$authorObject.email'
+                    email: '$authorObject.email',
+                    _id: '$authorObject._id'
                 }
             },
         },

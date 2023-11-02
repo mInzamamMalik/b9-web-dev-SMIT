@@ -137,7 +137,7 @@ const App = () => {
           <Routes>
             <Route path="/" element={<Home />} />
             <Route path="about" element={<About />} />
-            <Route path="chat" element={<Chat />} />
+            <Route path="chat/:userId" element={<Chat />} />
             <Route path="profile/:userId" element={<ProfilePage />} />
 
             <Route path="*" element={<Navigate to="/" replace={true} />} />

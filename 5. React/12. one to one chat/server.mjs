@@ -16,6 +16,7 @@ const userCollection = db.collection("users");
 
 import authRouter from './routes/auth.mjs'
 import postRouter from './routes/post.mjs'
+import chatRouter from './routes/chat.mjs'
 import commentRouter from './routes/comment.mjs'
 import feedRouter from './routes/feed.mjs'
 import unAuthProfileRouter from './unAuthRoutes/profile.mjs'
@@ -50,6 +51,14 @@ app.use("/api/v1", (req, res, next) => { // JWT
             _id: decoded._id,
         };
 
+        req.currentUser = {
+            firstName: decoded.firstName,
+            lastName: decoded.lastName,
+            email: decoded.email,
+            isAdmin: decoded.isAdmin,
+            _id: decoded._id,
+        };
+
         next();
 
     } catch (err) {
@@ -60,6 +69,7 @@ app.use("/api/v1", (req, res, next) => { // JWT
 })
 
 app.use("/api/v1", postRouter) // Secure api
+app.use("/api/v1", chatRouter) // Secure api
 
 
 app.use("/api/v1/ping", (req, res) => {
