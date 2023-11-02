@@ -52,7 +52,7 @@ router.post("/message", multer().none(), async (req, res, next) => {
     console.log("req.body: ", req.body);
     console.log("req.currentUser: ", req.currentUser);
 
-    if (!req.body.to_id && !req.body.messageText) {
+    if (!req.body.to_id || !req.body.messageText) {
         res.status(403);
         res.send(`required parameters missing, 
         example request body:
@@ -83,6 +83,8 @@ router.post("/message", multer().none(), async (req, res, next) => {
             createdOn: new Date()
         });
         console.log("insertResponse: ", insertResponse);
+
+        // io.emit("comeChannel", req.body.messageText);
 
         res.send({ message: 'message sent' });
     } catch (e) {
