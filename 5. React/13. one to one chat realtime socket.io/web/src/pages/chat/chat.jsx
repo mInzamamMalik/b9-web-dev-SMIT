@@ -5,13 +5,39 @@ import { useState, useRef, useEffect, useContext } from "react";
 import axios from "axios";
 import { baseUrl } from "../../core";
 import { GlobalContext } from "../../context/context";
+import io from 'socket.io-client';
 
 import './chat.css'
 const Chat = () => {
     let { state, dispatch } = useContext(GlobalContext);
 
 
-    console.log("state: ", state);
+    useEffect(() => {
+
+        const socket = io(baseUrl);
+        socket.on('connect', function () {
+            console.log("connected")
+        });
+        socket.on('disconnect', function (message) {
+            console.log("Socket disconnected from server: ", message);
+        });
+
+        socket.on(state?.user?._id, (e) => {
+            console.log("a new message for you: ", e);
+            setChat((prev) => {
+                return [e, ...prev]
+            });
+
+        })
+
+        return () => {
+            socket.close();
+        }
+    }, [])
+
+
+
+    // console.log("state: ", state);
 
     const params = useParams();
     const messageText = useRef("")
@@ -20,13 +46,13 @@ const Chat = () => {
     const [toggleRefresh, setToggleRefresh] = useState(false);
 
 
-    console.log("params: ", params);
+    // console.log("params: ", params);
 
     const getChat = async () => {
         try {
             setIsLoading(true);
             const response = await axios.get(`${baseUrl}/api/v1/messages/${params.userId}`);
-            console.log(response.data);
+            // console.log(response.data);
 
             setIsLoading(false);
             setChat([...response.data]);
@@ -47,7 +73,7 @@ const Chat = () => {
 
     const sendMessageHandler = async (event) => {
         event.preventDefault();
-        console.log(messageText.current.value);
+        // console.log(messageText.current.value);
 
         try {
             setIsLoading(true);
@@ -67,7 +93,7 @@ const Chat = () => {
 
             setIsLoading(false);
             setToggleRefresh(!toggleRefresh)
-            console.log(response.data);
+            // console.log(response.data);
             event.target.reset();
         } catch (error) {
             // handle error
@@ -88,11 +114,11 @@ const Chat = () => {
 
                 {chat.map((eachMessage, index) => (
 
-                    <div className={`chatBaloon ${(eachMessage.from_id === state.user._id) ? "my" : "your"}`}>
+                    <div key={index} className={`chatBaloon ${(eachMessage.from_id === state.user._id) ? "my" : "your"}`}>
                         {eachMessage.messageText}
                     </div>
                 ))}
-                
+
             </div>
 
             <form id="writeMessageForm" onSubmit={sendMessageHandler}>

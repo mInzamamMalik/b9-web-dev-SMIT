@@ -1,26 +1,28 @@
 import express from 'express';
 import cors from 'cors';
 import path from 'path';
-const __dirname = path.resolve();
 import 'dotenv/config';
 import cookieParser from 'cookie-parser'
 import jwt from 'jsonwebtoken';
+import { ObjectId } from 'mongodb'
+import { createServer } from "http";
+import { Server as socketIo } from 'socket.io';
+
+
 
 import { client } from './mongodb.mjs'
-import { ObjectId } from 'mongodb'
-
-const db = client.db("cruddb");
-const col = db.collection("posts");
-const userCollection = db.collection("users");
-
-
 import authRouter from './routes/auth.mjs'
 import postRouter from './routes/post.mjs'
 import chatRouter from './routes/chat.mjs'
 import commentRouter from './routes/comment.mjs'
 import feedRouter from './routes/feed.mjs'
 import unAuthProfileRouter from './unAuthRoutes/profile.mjs'
+import { globalIoObject  } from './core.mjs'
 
+const db = client.db("cruddb");
+const col = db.collection("posts");
+const userCollection = db.collection("users");
+const __dirname = path.resolve();
 
 
 
@@ -84,8 +86,25 @@ app.get('*', (req, res) => {
     // res.redirect('/');
 })
 
+// THIS IS THE ACTUAL SERVER WHICH IS RUNNING
+const server = createServer(app);
+
+// handing over server access to socket.io
+const io = new socketIo(server, { cors: { origin: "*", methods: "*", } });
+globalIoObject.io = io;
+
+io.on("connection", (socket) => {
+    console.log("New client connected with id: ", socket.id);
+})
+
+// setInterval(() => {
+//     io.emit(
+//         "channel1",
+//         `some data => ${new Date().toLocaleString()}`
+//     )
+// }, 1000);
 
 const PORT = process.env.PORT || 5002;
-app.listen(PORT, () => {
-    console.log(`Example server listening on port ${PORT}`)
+server.listen(PORT, function () {
+    console.log("server is running on", PORT);
 })

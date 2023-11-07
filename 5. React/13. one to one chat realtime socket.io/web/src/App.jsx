@@ -2,7 +2,8 @@ import { useEffect, useState, useContext } from "react";
 import logo from "./logo.svg";
 import "./App.css";
 import axios from "axios";
-import { Routes, Route, Link, Navigate } from "react-router-dom";
+import { Routes, Route, Link, Navigate, useLocation } from "react-router-dom";
+import io from 'socket.io-client';
 
 import Home from "./pages/home/home";
 import ProfilePage from "./pages/profile/profile";
@@ -17,6 +18,49 @@ import { baseUrl } from "./core";
 
 const App = () => {
   const { state, dispatch } = useContext(GlobalContext);
+  const [notifications, setNotifications] = useState([]);
+
+  const location = useLocation();
+
+
+
+  useEffect(() => {
+
+    const socket = io(baseUrl);
+    socket.on('connect', function () {
+      console.log("connected in app.jsx")
+    });
+    socket.on('disconnect', function (message) {
+      console.log("Socket disconnected from server: ", message);
+    });
+
+    if (state?.user?._id) {
+
+      console.log(`notification-${state?.user?._id}`);
+      socket.on(`notification-${state?.user?._id}`, (e) => {
+        const location = window.location.pathname
+
+        console.log("new item from server: ", location);
+
+        if(!location.includes("chat")){
+          setNotifications((prev) => {
+            return [e, ...prev]
+          })
+
+        }
+
+        setTimeout(()=>{
+          setNotifications([])
+        }, 10000)
+      })
+
+    }
+
+    return () => {
+      socket.close();
+    }
+  }, [state])
+
 
   useEffect(() => {
     axios.interceptors.request.use(
@@ -69,8 +113,34 @@ const App = () => {
     }
   };
 
+  const handleCloseNotification = (index) => {
+    notifications.splice(index, 1);
+    setNotifications([...notifications]);
+  }
+  const handleOpenNotification = () => {
+
+  }
+
   return (
     <div>
+
+
+      <div className="notificationWindow">
+        {
+          notifications.map((eachNotification, index) =>
+          (<div className="notification" key={index}>
+            {eachNotification}
+            <br />
+            <div>
+              <button onClick={() => { handleCloseNotification(index) }}>close</button>
+              <button onClick={handleOpenNotification}>open</button>
+            </div>
+          </div>))
+        }
+      </div>
+
+
+
       {/* admin routes */}
       {state.isLogin === true && state.role === "admin" ? (
         <>

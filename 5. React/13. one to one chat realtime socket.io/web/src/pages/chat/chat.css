@@ -32,7 +32,7 @@
 }
 
 #chatWindow {
-    border: 1px solid red;
+    /* border: 1px solid red; */
     position: absolute;
     bottom: 64px;
     left: 0px;

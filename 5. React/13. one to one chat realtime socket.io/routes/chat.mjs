@@ -13,7 +13,7 @@ const db = client.db("cruddb");
 const messagesCollection = db.collection("messages");
 const col = db.collection("posts");
 const userCollection = db.collection("users");
-
+import { globalIoObject } from '../core.mjs';
 
 // // https://firebase.google.com/docs/storage/admin/start
 // let serviceAccount = {
@@ -69,8 +69,8 @@ router.post("/message", multer().none(), async (req, res, next) => {
     }
 
     try {
-        const insertResponse = await messagesCollection.insertOne({
 
+        const newMessage = {
             fromName: req.currentUser.firstName + " " + req.currentUser.lastName,
             fromEamil: req.currentUser.email, // malik@abc.com
             from_id: new ObjectId(req.currentUser._id), // 245523423423424234
@@ -79,12 +79,25 @@ router.post("/message", multer().none(), async (req, res, next) => {
 
             messageText: req.body.messageText,
             imgUrl: req.body.imgUrl,
-
             createdOn: new Date()
-        });
+        }
+
+        const insertResponse = await messagesCollection.insertOne(newMessage);
         console.log("insertResponse: ", insertResponse);
 
-        // io.emit("comeChannel", req.body.messageText);
+        newMessage._id = insertResponse.insertedId;
+
+        if (globalIoObject.io) {
+            console.log(`emiting message to ${req.body.to_id}`);
+            globalIoObject.io.emit(req.body.to_id, newMessage);
+
+            globalIoObject.io.emit(
+                `notification-${req.body.to_id}`,
+                `new message from ${req.currentUser.firstName}: ${req.body.messageText}`
+            );
+
+
+        }
 
         res.send({ message: 'message sent' });
     } catch (e) {
@@ -131,7 +144,7 @@ router.get("/messages/:from_id", async (req, res, next) => {
 
     try {
         let results = await cursor.toArray()
-        console.log("results: ", results);
+        // console.log("results: ", results);
         res.send(results);
     } catch (e) {
         console.log("error getting data mongodb: ", e);
