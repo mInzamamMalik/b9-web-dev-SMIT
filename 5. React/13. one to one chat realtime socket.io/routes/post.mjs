@@ -317,7 +317,7 @@ router.get('/post/:postId', async (req, res, next) => {
 
     try {
         let result = await col.findOne({ _id: new ObjectId(req.params.postId) });
-        console.log("result: ", result); // [{...}] []
+        // console.log("result: ", result); // [{...}] []
         res.send(result);
     } catch (e) {
         console.log("error getting data mongodb: ", e);
@@ -336,7 +336,7 @@ const getProfileMiddleware = async (req, res, next) => {
 
     try {
         let result = await userCollection.findOne({ _id: new ObjectId(userId) });
-        console.log("result: ", result); // [{...}] []
+        // console.log("result: ", result); // [{...}] []
         res.send({
             message: 'profile fetched',
             data: {

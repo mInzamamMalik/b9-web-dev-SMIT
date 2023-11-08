@@ -14,7 +14,10 @@ const Chat = () => {
 
     useEffect(() => {
 
-        const socket = io(baseUrl);
+        const socket = io(baseUrl, {
+            secure: true,
+            withCredentials: true
+          })
         socket.on('connect', function () {
             console.log("connected")
         });
@@ -22,7 +25,7 @@ const Chat = () => {
             console.log("Socket disconnected from server: ", message);
         });
 
-        socket.on(state?.user?._id, (e) => {
+        socket.on("NEW_MESSAGE", (e) => {
             console.log("a new message for you: ", e);
             setChat((prev) => {
                 return [e, ...prev]

@@ -13,7 +13,7 @@ const db = client.db("cruddb");
 const messagesCollection = db.collection("messages");
 const col = db.collection("posts");
 const userCollection = db.collection("users");
-import { globalIoObject } from '../core.mjs';
+import { globalIoObject, socketUsers } from '../core.mjs';
 
 // // https://firebase.google.com/docs/storage/admin/start
 // let serviceAccount = {
@@ -87,17 +87,28 @@ router.post("/message", multer().none(), async (req, res, next) => {
 
         newMessage._id = insertResponse.insertedId;
 
-        if (globalIoObject.io) {
-            console.log(`emiting message to ${req.body.to_id}`);
-            globalIoObject.io.emit(req.body.to_id, newMessage);
-
-            globalIoObject.io.emit(
-                `notification-${req.body.to_id}`,
+        // private emit only to a user
+        if (socketUsers[req.body.to_id]) { // if user is online
+            socketUsers[req.body.to_id].emit("NEW_MESSAGE", newMessage)
+            socketUsers[req.body.to_id].emit(
+                `NOTIFICATIONS`,
                 `new message from ${req.currentUser.firstName}: ${req.body.messageText}`
             );
-
-
+        }else{
+            console.log("this iser is not online");
         }
+
+
+        // // global emit publicly
+        // if (globalIoObject.io) {
+        //     console.log(`emiting message to ${req.body.to_id}`);
+        //     globalIoObject.io.emit(req.body.to_id, newMessage);
+
+        //     globalIoObject.io.emit(
+        //         `notification-${req.body.to_id}`,
+        //         `new message from ${req.currentUser.firstName}: ${req.body.messageText}`
+        //     );
+        // }
 
         res.send({ message: 'message sent' });
     } catch (e) {

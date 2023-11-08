@@ -7,7 +7,7 @@ import jwt from 'jsonwebtoken';
 import { ObjectId } from 'mongodb'
 import { createServer } from "http";
 import { Server as socketIo } from 'socket.io';
-
+import cookie from 'cookie';
 
 
 import { client } from './mongodb.mjs'
@@ -17,7 +17,7 @@ import chatRouter from './routes/chat.mjs'
 import commentRouter from './routes/comment.mjs'
 import feedRouter from './routes/feed.mjs'
 import unAuthProfileRouter from './unAuthRoutes/profile.mjs'
-import { globalIoObject  } from './core.mjs'
+import { globalIoObject, socketUsers } from './core.mjs'
 
 const db = client.db("cruddb");
 const col = db.collection("posts");
@@ -38,12 +38,12 @@ app.use(cors({
 app.use("/api/v1", authRouter)
 
 app.use("/api/v1", (req, res, next) => { // JWT
-    console.log("cookies: ", req.cookies);
+    // console.log("cookies: ", req.cookies);
 
     const token = req.cookies.token;
     try {
         const decoded = jwt.verify(token, process.env.SECRET);
-        console.log("decoded: ", decoded);
+        // console.log("decoded: ", decoded);
 
         req.body.decoded = {
             firstName: decoded.firstName,
@@ -90,12 +90,46 @@ app.get('*', (req, res) => {
 const server = createServer(app);
 
 // handing over server access to socket.io
-const io = new socketIo(server, { cors: { origin: "*", methods: "*", } });
+const io = new socketIo(server, {
+    cors: {
+        origin: ["*", "http://localhost:3000"],
+        methods: "*",
+        credentials: true
+    }
+});
+
 globalIoObject.io = io;
+
+
+io.use((socket, next) => {
+    console.log("socket middleware");
+    // Access cookies, including secure cookies
+
+    const parsedCookies = cookie.parse(socket.request.headers.cookie || "");
+    console.log("parsedCookies: ", parsedCookies.token);
+
+    try {
+        const decoded = jwt.verify(parsedCookies.token, process.env.SECRET);
+        console.log("decoded: ", decoded);
+
+        socketUsers[decoded._id] = socket;
+
+        socket.on("disconnect", (reason, desc) => {
+            console.log("disconnect event: ", reason, desc); // "ping timeout"
+        });
+
+        next();
+
+    } catch (err) {
+        return next(new Error('Authentication error'));
+    }
+});
 
 io.on("connection", (socket) => {
     console.log("New client connected with id: ", socket.id);
+
 })
+
 
 // setInterval(() => {
 //     io.emit(

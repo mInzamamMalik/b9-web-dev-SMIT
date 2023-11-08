@@ -26,7 +26,12 @@ const App = () => {
 
   useEffect(() => {
 
-    const socket = io(baseUrl);
+    const socket = io(baseUrl, {
+      secure: true,
+      withCredentials: true
+    })
+
+
     socket.on('connect', function () {
       console.log("connected in app.jsx")
     });
@@ -34,27 +39,23 @@ const App = () => {
       console.log("Socket disconnected from server: ", message);
     });
 
-    if (state?.user?._id) {
 
-      console.log(`notification-${state?.user?._id}`);
-      socket.on(`notification-${state?.user?._id}`, (e) => {
+    socket.on(`NOTIFICATIONS`, (e) => {
         const location = window.location.pathname
 
         console.log("new item from server: ", location);
 
-        if(!location.includes("chat")){
+        if (!location.includes("chat")) {
           setNotifications((prev) => {
             return [e, ...prev]
           })
 
         }
 
-        setTimeout(()=>{
+        setTimeout(() => {
           setNotifications([])
         }, 10000)
       })
-
-    }
 
     return () => {
       socket.close();
@@ -99,7 +100,7 @@ const App = () => {
   const logoutHandler = async () => {
     try {
       await axios.post(
-        `${baseUrl}/api/v1/logout`,
+        `${ baseUrl } / api / v1 / logout`,
         {},
         {
           withCredentials: true,
@@ -147,13 +148,13 @@ const App = () => {
           <nav className="navBar">
             <ul className="left">
               <li>
-                <Link to={`/`}>Admin Home</Link>
+                <Link to={`/ `}>Admin Home</Link>
               </li>
               <li>
-                <Link to={`/chat`}>Admin Chat</Link>
+                <Link to={`/ chat`}>Admin Chat</Link>
               </li>
               <li>
-                <Link to={`/about`}>Admin About</Link>
+                <Link to={`/ about`}>Admin About</Link>
               </li>
             </ul>
             <div className="right">
@@ -178,16 +179,16 @@ const App = () => {
           <nav className="navBar">
             <ul className="left">
               <li>
-                <Link className="bg-indigo-500 rounded text-white py-1 px-6 mr-2" to={`/`}>Home</Link>
+                <Link className="bg-indigo-500 rounded text-white py-1 px-6 mr-2" to={`/ `}>Home</Link>
               </li>
               <li>
-                <Link className="bg-indigo-500 rounded text-white py-1 px-6 m-2" to={`/profile/${state.user._id}`}>Profile</Link>
+                <Link className="bg-indigo-500 rounded text-white py-1 px-6 m-2" to={`/ profile / ${ state.user._id }`}>Profile</Link>
               </li>
               <li>
-                <Link className="bg-indigo-500 rounded text-white py-1 px-6 m-2" to={`/chat`}>Chat</Link>
+                <Link className="bg-indigo-500 rounded text-white py-1 px-6 m-2" to={`/ chat`}>Chat</Link>
               </li>
               <li>
-                <Link className="bg-indigo-500 rounded text-white py-1 px-6 m-2" to={`/about`}>About</Link>
+                <Link className="bg-indigo-500 rounded text-white py-1 px-6 m-2" to={`/ about`}>About</Link>
               </li>
             </ul>
             <div className="right">
@@ -224,10 +225,10 @@ const App = () => {
             </ul>
             <ul className="right">
               <li>
-                <Link to={`/login`}>Login</Link>
+                <Link to={`/ login`}>Login</Link>
               </li>
               <li>
-                <Link to={`/signup`}>Signup</Link>
+                <Link to={`/ signup`}>Signup</Link>
               </li>
             </ul>
           </nav>
