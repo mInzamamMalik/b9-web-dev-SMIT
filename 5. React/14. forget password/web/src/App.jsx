@@ -13,6 +13,9 @@ import Login from "./pages/login/login";
 import Signup from "./pages/signup/signup";
 import splashScreen from "./assets/splash.gif";
 
+import ForgetPassword from './pages/forgetPassword/forgetPassword'
+import ForgetPasswordComplete from './pages/forgetPasswordComplete/forgetPasswordComplete'
+
 import { GlobalContext } from "./context/context";
 import { baseUrl } from "./core";
 
@@ -41,21 +44,21 @@ const App = () => {
 
 
     socket.on(`NOTIFICATIONS`, (e) => {
-        const location = window.location.pathname
+      const location = window.location.pathname
 
-        console.log("new item from server: ", location);
+      console.log("new item from server: ", location);
 
-        if (!location.includes("chat")) {
-          setNotifications((prev) => {
-            return [e, ...prev]
-          })
+      if (!location.includes("chat")) {
+        setNotifications((prev) => {
+          return [e, ...prev]
+        })
 
-        }
+      }
 
-        setTimeout(() => {
-          setNotifications([])
-        }, 10000)
-      })
+      setTimeout(() => {
+        setNotifications([])
+      }, 10000)
+    })
 
     return () => {
       socket.close();
@@ -100,7 +103,7 @@ const App = () => {
   const logoutHandler = async () => {
     try {
       await axios.post(
-        `${ baseUrl } / api / v1 / logout`,
+        `${baseUrl}/api/v1/logout`,
         {},
         {
           withCredentials: true,
@@ -182,7 +185,7 @@ const App = () => {
                 <Link className="bg-indigo-500 rounded text-white py-1 px-6 mr-2" to={`/ `}>Home</Link>
               </li>
               <li>
-                <Link className="bg-indigo-500 rounded text-white py-1 px-6 m-2" to={`/ profile / ${ state.user._id }`}>Profile</Link>
+                <Link className="bg-indigo-500 rounded text-white py-1 px-6 m-2" to={`/ profile / ${state.user._id}`}>Profile</Link>
               </li>
               <li>
                 <Link className="bg-indigo-500 rounded text-white py-1 px-6 m-2" to={`/ chat`}>Chat</Link>
@@ -225,10 +228,10 @@ const App = () => {
             </ul>
             <ul className="right">
               <li>
-                <Link to={`/ login`}>Login</Link>
+                <Link to={`/login`}>Login</Link>
               </li>
               <li>
-                <Link to={`/ signup`}>Signup</Link>
+                <Link to={`/signup`}>Signup</Link>
               </li>
             </ul>
           </nav>
@@ -237,6 +240,9 @@ const App = () => {
             <Route path="login" element={<Login />} />
             <Route path="signup" element={<Signup />} />
             <Route path="profile/:userId" element={<ProfilePage />} />
+
+            <Route path="forget-password" element={<ForgetPassword />} />
+            <Route path="forget-password-complete" element={<ForgetPasswordComplete />} />
 
             <Route path="*" element={<Navigate to="/login" replace={true} />} />
           </Routes>

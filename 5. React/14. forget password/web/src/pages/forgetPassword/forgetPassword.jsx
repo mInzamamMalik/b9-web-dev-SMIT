@@ -1,17 +1,18 @@
 import { useState, useRef, useEffect, useContext } from "react";
 import axios from "axios";
-import "./login.css";
-import { Link } from "react-router-dom";
+import { useNavigate } from 'react-router-dom';
+
 
 import { GlobalContext } from "../../context/context";
 
 import { baseUrl } from "../../core";
 
 const Login = () => {
+  const navigate = useNavigate();
+
   let { state, dispatch } = useContext(GlobalContext);
 
   const emailInputRef = useRef(null);
-  const passwordInputRef = useRef(null);
 
   const [alertMessage, setAlertMessage] = useState("");
   const [errorMessage, setErrorMessage] = useState("");
@@ -23,28 +24,22 @@ const Login = () => {
     }, 5000);
   }, [alertMessage, errorMessage]);
 
-  const LoginSubmitHandler = async (e) => {
+  const ForgetPasswordSubmitHandler = async (e) => {
     e.preventDefault();
 
     try {
       const response = await axios.post(
-        `${baseUrl}/api/v1/login`,
+        `${baseUrl}/api/v1/forget-password`,
         {
           email: emailInputRef.current.value,
-          password: passwordInputRef.current.value,
-        },
-        {
-          withCredentials: true,
         }
       );
 
-      dispatch({
-        type: "USER_LOGIN",
-        payload: response.data.data,
-      });
-
       console.log("resp: ", response?.data?.message);
       setAlertMessage(response?.data?.message);
+      navigate(`/forget-password-complete`, { state: { email: emailInputRef.current.value } });
+
+
     } catch (e) {
       console.log(e);
       setErrorMessage(e.response?.data?.message);
@@ -53,30 +48,15 @@ const Login = () => {
 
   return (
     <div>
-      <h1>Login</h1>
+      <h1>Forget Password</h1>
 
-      <form id="loginForm" onSubmit={LoginSubmitHandler}>
+      <form id="loginForm" onSubmit={ForgetPasswordSubmitHandler}>
         <label htmlFor="emailInput">Email:</label>
         <input ref={emailInputRef} type="email" autoComplete="email" name="emailInput" id="emailInput" required />
 
-        <br />
-        <label htmlFor="passwordInput">Password:</label>
-        <input
-          ref={passwordInputRef}
-          type="password"
-          autoComplete="current-password"
-          name="passwordInput"
-          id="passwordInput"
-        />
-
-        <br />
-
-        <button type="submit">Login</button>
+        <button type="submit">Next</button>
 
         <div className="alertMessage">{alertMessage}</div>
-        <div className="errorMessage">{errorMessage}</div>
-
-        <Link to={`/forget-password`}>Forget Password</Link>
       </form>
     </div>
   );

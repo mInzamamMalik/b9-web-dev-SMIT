@@ -3,12 +3,17 @@ import express from 'express';
 let router = express.Router()
 import { client } from './../mongodb.mjs'
 import jwt from 'jsonwebtoken';
+import otpGenerator from 'otp-generator';
+import moment from 'moment';
+
 import {
     stringToHash,
+    verifyHash,
     varifyHash
 } from "bcrypt-inzi";
 
 const userCollection = client.db("cruddb").collection("users");
+const otpCollection = client.db("cruddb").collection("otpCodes");
 
 
 
@@ -179,34 +184,104 @@ router.post('/forget-password', async (req, res, next) => {
             return;
         }
 
-        
+        const otpCode = otpGenerator.generate(6, {
+            upperCaseAlphabets: false,
+            lowerCaseAlphabets: false,
+            specialChars: false
+        });
 
-        
+        console.log("otpCode: ", otpCode);
 
-        const passwordHash = await stringToHash(req.body.password);
+        // postmarkClient.send({
+        //     from: "no-reply@aicarz.com",
+        //     to: user.email,
+        //     text: `Hi ${user.firstName}! here is your forget password
+        //     otp code, this is valid for 15 minutes: ${otpCode}`
+        // })
 
-        const insertResponse = await userCollection.insertOne({
-            isAdmin: false,
-            firstName: req.body.firstName,
-            lastName: req.body.lastName,
+
+
+        const otpCodeHash = await stringToHash(otpCode);
+
+        const insertResponse = await otpCollection.insertOne({
             email: req.body.email,
-            password: passwordHash,
+            otpCodeHash: otpCodeHash,
             createdOn: new Date()
         });
         console.log("insertResponse: ", insertResponse);
 
-        res.send({ message: 'Signup successful' });
+        res.send({ message: 'Forget password otp send' });
 
-    } else { // user already exists
-        res.status(403).send({
-            message: "user already exist with this email"
-        });
+    } catch (e) {
+        console.log("error getting data mongodb: ", e);
+        res.status(500).send('server error, please try later');
+    }
+})
+
+router.post('/forget-password-complete', async (req, res, next) => {
+
+    if (!req.body?.email
+        || !req.body.otpCode
+        || !req.body.newPassword) {
+
+        res.status(403);
+        res.send(`required parameters missing, 
+        example request body:
+        {
+            email: "some@email.com",
+            otpCode: "344532",
+        } `);
+        return;
     }
 
-} catch (e) {
-    console.log("error getting data mongodb: ", e);
-    res.status(500).send('server error, please try later');
-}
+    req.body.email = req.body.email.toLowerCase();
+
+    try {
+        const otpRecord = await otpCollection.findOne(
+            { email: req.body.email },
+            { sort: { _id: -1 } }
+        )
+        console.log("otpRecord: ", otpRecord);
+
+        if (!otpRecord) { // user not found
+            res.status(403).send({
+                message: "invalid otp"
+            });
+            return;
+        }
+
+        const isOtpValid = await verifyHash(req.body.otpCode, otpRecord.otpCodeHash);
+
+        if (!isOtpValid) {
+            res.status(403).send({
+                message: "invalid otp"
+            });
+            return;
+        }
+
+        if (moment().diff(moment(otpRecord.createdOn), 'minutes') >= 15) {
+            res.status(403).send({
+                message: "invalid otp"
+            });
+            return;
+        }
+
+        const passwordHash = await stringToHash(req.body.newPassword);
+
+        const updateResp = await userCollection.updateOne(
+            { email: otpRecord.email },
+            {
+                $set: { password: passwordHash }
+            });
+        console.log("updateResp: ", updateResp);
+
+
+        res.send({ message: 'Forget password completed, proceed to login with new password' });
+
+    } catch (e) {
+        console.log("error getting data mongodb: ", e);
+        res.status(500).send('server error, please try later');
+    }
 })
 
 
