@@ -5,6 +5,8 @@ import { client } from './../mongodb.mjs'
 import jwt from 'jsonwebtoken';
 import otpGenerator from 'otp-generator';
 import moment from 'moment';
+import postmark from 'postmark'
+import useragent from 'useragent'; // You may need to install this package using: npm install useragent
 
 import {
     stringToHash,
@@ -66,6 +68,35 @@ router.post('/login', async (req, res, next) => {
                     expires: new Date(Date.now() + 86400000)
                 });
 
+
+                const agent = useragent.parse(req.get('User-Agent'));
+
+                const emailMessage = `
+                        Login Alert:
+                        email: ${req.body.email}
+                        Browser: ${agent.toAgent()}
+                        OS: ${agent.os.toString()}
+                        Device: ${agent.device.toString()}
+                        IP Address: ${req.ip}
+                        Timestamp: ${new Date().toLocaleString()}
+                    `;
+
+
+                console.log(emailMessage);
+
+
+                // Send an email:
+                const POSTMARK_TOKEN="your postmark token";
+                const client = new postmark.ServerClient(POSTMARK_TOKEN);
+
+
+                client.sendEmail({
+                    "From": "no-reply@yourverifiedsign.com",
+                    "To": req.body.email,
+                    "Subject": "your app name - Login Alert",
+                    "TextBody": emailMessage
+                });
+
                 res.send({
                     message: "login successful",
                     data: {
@@ -112,14 +143,14 @@ router.post('/signup', async (req, res, next) => {
         || !req.body?.password
     ) {
         res.status(403);
-        res.send(`required parameters missing, 
-        example request body:
-        {
-            firstName: "some firstName",
-            lastName: "some lastName",
-            email: "some@email.com",
-            password: "some$password",
-        } `);
+        res.send(`required parameters missing,
+                    example request body:
+                        {
+                            firstName: "some firstName",
+                            lastName: "some lastName",
+                            email: "some@email.com",
+                            password: "some$password",
+                        } `);
         return;
     }
 
@@ -163,11 +194,11 @@ router.post('/forget-password', async (req, res, next) => {
 
     if (!req.body?.email) {
         res.status(403);
-        res.send(`required parameters missing, 
-        example request body:
-        {
-            email: "some@email.com"
-        } `);
+        res.send(`required parameters missing,
+                    example request body:
+                {
+                    email: "some@email.com"
+                } `);
         return;
     }
 
@@ -195,7 +226,7 @@ router.post('/forget-password', async (req, res, next) => {
         // postmarkClient.send({
         //     from: "no-reply@aicarz.com",
         //     to: user.email,
-        //     text: `Hi ${user.firstName}! here is your forget password
+        //     text: `Hi ${ user.firstName } !here is your forget password
         //     otp code, this is valid for 15 minutes: ${otpCode}`
         // })
 
