@@ -208,8 +208,12 @@ router.post('/post',
     })
 
 
-
+// http://baseurl.com/api/v1/feed?page=0
 router.get('/feed', async (req, res, next) => {
+
+    const page = Number(req.query.page) || 0;
+
+
 
     // const cursor = col.find({})
     //     .sort({ _id: -1 })
@@ -251,12 +255,11 @@ router.get('/feed', async (req, res, next) => {
             $sort: { _id: -1 }
         },
         {
-            $skip: 0
+            $skip: page// 0, 5
         },
         {
-            $limit: 100,
+            $limit: 10000,
         }
-
     ])
 
 

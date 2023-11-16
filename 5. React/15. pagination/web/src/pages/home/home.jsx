@@ -26,7 +26,7 @@ const Home = () => {
   const getAllPost = async () => {
     try {
       setIsLoading(true);
-      const response = await axios.get(`${baseUrl}/api/v1/feed`, {
+      const response = await axios.get(`${baseUrl}/api/v1/feed?page=0`, {
         withCredentials: true
       });
       console.log(response.data);
@@ -38,6 +38,26 @@ const Home = () => {
       setIsLoading(false);
     }
   };
+
+  const loadMore = async () => {
+    try {
+      setIsLoading(true);
+      const response = await axios.get(`${baseUrl}/api/v1/feed?page=${allPosts.length}`, {
+        withCredentials: true
+      });
+      console.log(response.data);
+
+      setIsLoading(false);
+
+      setAllPosts((prev) => {
+        return [...prev, ...response.data];
+      });
+
+    } catch (error) {
+      console.log(error.data);
+      setIsLoading(false);
+    }
+  }
 
   useEffect(() => {
     getAllPost();
@@ -247,9 +267,9 @@ const Home = () => {
               </form>
             ) : (
               <div>
-                <h2>{post.title}</h2>
-                <h4>{post.authorObject.firstName} {post.authorObject.lastName} - {post.authorObject.email}</h4>
-                <p>{post.text}</p>
+                <h2>{post?.title}</h2>
+                <h4>{post?.authorObject?.firstName} {post?.authorObject?.lastName} - {post.authorObject?.email}</h4>
+                <p>{post?.text}</p>
 
                 {post.img &&
                   <>
@@ -299,6 +319,12 @@ const Home = () => {
             )}
           </div>
         ))}
+
+
+        <br />
+        <br />
+        <br />
+        <button onClick={loadMore} style={{ fontSize: '2rem' }}>load more</button>
 
         <br />
       </div>
