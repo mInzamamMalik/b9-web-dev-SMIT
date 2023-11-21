@@ -82,11 +82,11 @@ router.post('/login', async (req, res, next) => {
                     `;
 
 
-                console.log(emailMessage);
+                // console.log(emailMessage);
 
 
                 // Send an email:
-                const POSTMARK_TOKEN="your postmark token";
+                const POSTMARK_TOKEN = "your postmark token";
                 const client = new postmark.ServerClient(POSTMARK_TOKEN);
 
 

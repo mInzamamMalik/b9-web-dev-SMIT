@@ -142,3 +142,5 @@ const PORT = process.env.PORT || 5002;
 server.listen(PORT, function () {
     console.log("server is running on", PORT);
 })
+
+export default app;
