@@ -1,0 +1,36 @@
+{
+  "name": "4.-server",
+  "version": "1.0.0",
+  "description": "",
+  "main": "server.mjs",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node server.mjs",
+    "dev": "nodemon server.mjs"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "bcrypt-inzi": "^2.0.0",
+    "cookie": "^0.6.0",
+    "cookie-parser": "^1.4.6",
+    "cors": "^2.8.5",
+    "dotenv": "^16.3.1",
+    "express": "^4.18.2",
+    "firebase-admin": "^11.11.0",
+    "jsonwebtoken": "^9.0.2",
+    "moment": "^2.29.4",
+    "mongodb": "^5.7.0",
+    "multer": "^1.4.5-lts.1",
+    "nanoid": "^4.0.2",
+    "openai": "^4.6.0",
+    "otp-generator": "^4.0.1",
+    "postmark": "^3.11.0",
+    "socket.io": "^4.7.2",
+    "useragent": "^2.3.0"
+  },
+  "devDependencies": {
+    "@types/cookie-parser": "^1.4.6",
+    "@types/multer": "^1.4.9"
+  }
+}
