@@ -6,7 +6,8 @@
   "scripts": {
     "test": "mocha",
     "start": "node server.mjs",
-    "dev": "nodemon server.mjs"
+    "dev": "nodemon server.mjs",
+    "deploy":"gcloud app deploy"
   },
   "author": "",
   "license": "ISC",
