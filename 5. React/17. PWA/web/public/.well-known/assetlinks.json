@@ -1,0 +1,8 @@
+[{
+      "relation": ["delegate_permission/common.handle_all_urls"],
+      "target": {
+        "namespace": "android_app",
+        "package_name": "com.appspot.r.ue.smitdemo_dot_civil_tempo_388912.twa",
+        "sha256_cert_fingerprints": ["49:E7:2F:A5:91:77:2E:81:04:B3:29:43:65:32:45:42:E2:10:E3:E6:52:4C:77:CD:9B:0A:24:96:77:C8:E5:89"]
+      }
+    }]
